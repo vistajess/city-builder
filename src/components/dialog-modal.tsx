@@ -38,7 +38,6 @@ export const DialogModal = ({
           {children}
         </div>
         <DialogFooter>
-          {/* <Button onClick={onPrimaryClick}>{primaryButtonText}</Button> */}
           {footerChildren}
         </DialogFooter>
       </DialogContent>
