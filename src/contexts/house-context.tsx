@@ -1,9 +1,11 @@
-"use client";
+'use client';
 
 import { createContext, useContext, useState } from "react";
 import { House } from "../types/house";
-
+import { Location } from "../types/location";
 interface HouseContextType {
+  savedLocation: Location | null;
+  setSavedLocation: (location: Location) => void;
   houses: House[];
   getHousesByLocation: (locationId: string) => void;
   addHouse: (house: House) => void;
@@ -12,11 +14,13 @@ interface HouseContextType {
 }
 
 export const HouseContext = createContext<HouseContextType>({
+  savedLocation: null,
+  setSavedLocation: (location: Location) => { },
   houses: [],
-  getHousesByLocation: (locationId: string) => {},
-  addHouse: (house: House) => {},
-  updateHouse: (house: House) => {},
-  deleteHouse: (house: House) => {},
+  getHousesByLocation: (locationId: string) => { },
+  addHouse: (house: House) => { },
+  updateHouse: (house: House) => { },
+  deleteHouse: (house: House) => { },
 });
 
 export type HousesContextProviderProps = {
@@ -25,11 +29,16 @@ export type HousesContextProviderProps = {
 
 export const HouseContextProvider = ({ children }: HousesContextProviderProps) => {
   const [houses, setHouses] = useState<House[]>([]);
+  const [savedLocation, setSavedLocation] = useState<Location | null>(null);
+
+  const handleSavedLocation = (location: Location) => {
+    setSavedLocation(location);
+  }
 
   const getHousesByLocation = (locationId: string) => {
     setHouses(houses.filter((h) => h.location.id === locationId));
   }
-  
+
   const addHouse = (house: House) => {
     setHouses([...houses, house]);
   }
@@ -43,13 +52,15 @@ export const HouseContextProvider = ({ children }: HousesContextProviderProps) =
   }
 
   const contextvalue: HouseContextType = {
+    savedLocation,
+    setSavedLocation: handleSavedLocation,
     houses,
     getHousesByLocation,
     addHouse,
     updateHouse,
     deleteHouse,
   }
-  
+
   return (
     <HouseContext.Provider value={contextvalue}>
       {children}
@@ -58,5 +69,9 @@ export const HouseContextProvider = ({ children }: HousesContextProviderProps) =
 };
 
 export const useHouseContext = () => {
-  return useContext(HouseContext);
+  const context = useContext(HouseContext);
+  if (context === undefined) {
+    throw new Error('useHouseContext must be used within a HouseProvider');
+  }
+  return context;
 };
