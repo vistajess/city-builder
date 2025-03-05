@@ -1,0 +1,33 @@
+.house-container {
+  position: relative;
+}
+
+/* .roof {
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 50px solid brown;
+  position: absolute;
+  top: -50px;
+  left: 0;
+} */
+
+.roof {
+  width: 0;
+  height: 0;
+  border-left: 220px solid transparent;
+  border-right: 220px solid transparent;
+  border-bottom: 80px solid #e65837;
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.floor {
+  width: 100px;
+  height: 100px;
+  background-color: brown;
+}
+

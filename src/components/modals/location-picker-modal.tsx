@@ -1,29 +1,23 @@
 'use client';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/src/components/ui/select";
-import { forwardRef, useEffect, useState } from "react";
-import { AVAILABLE_LOCATIONS } from "../constants/location";
-import { useHouseContext } from "../contexts/house-context";
-import { useWeatherQuery } from "../hooks/weather";
-import { Location } from "../types/location";
-import { Weather } from "../types/weather";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { AVAILABLE_LOCATIONS } from "../../constants/location";
+import { useHouseContext } from "../../contexts/house-context";
+import { useModal } from "../../hooks/useModal";
+import { useWeatherQuery } from "../../hooks/useWeatherQuery";
+import { Location } from "../../types/location";
+import { Weather } from "../../types/weather";
 import { BaseModal } from "./base-modal";
-import { Loader } from "./loader/loader";
-import { Button } from "./ui/button";
-import { WeatherCard } from "./weather-card";
-import { useImperativeHandle } from "react";
+import { Loader } from "../loader/loader";
+import { Button } from "../ui/button";
+import { WeatherCard } from "../weather-card";
 
-export type LocationPickerRef = {
-  openModal: () => void;
-  closeModal: () => void;
-};
-
-const LocationPicker = forwardRef(({ onSave }: { onSave: () => void }, ref) => {
-  const { savedLocation, setSavedLocation } = useHouseContext();
+const LocationPickerModal = forwardRef(({ onSave }: { onSave: () => void }, ref) => {
+  const { setSavedLocation } = useHouseContext();
   const [currentLocation, setCurrentLocation] = useState<Location>(AVAILABLE_LOCATIONS[0]);
-  const [isOpen, setIsOpen] = useState(true);
+  const { isOpen, setIsOpen } = useModal(true);
   const [weatherData, setWeatherData] = useState<Weather | null>(null);
   const { data, isLoading, isError, error } = useWeatherQuery(currentLocation);
-
 
   useImperativeHandle(ref, () => ({
     openModal() {
@@ -101,5 +95,5 @@ const LocationPicker = forwardRef(({ onSave }: { onSave: () => void }, ref) => {
   );
 });
 
-export default LocationPicker;
+export default LocationPickerModal;
 

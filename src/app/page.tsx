@@ -1,29 +1,33 @@
 'use client';
 import { useRef } from "react";
-import LocationPicker, { LocationPickerRef } from "../components/location-picker";
-import MainHeader from "../components/main-header";
-
+import MainHeader from "../components/overview/overview";
+import LocationPickerModal from "../components/modals/location-picker-modal";
+import { ModalRef } from "../types/modal";
+import { House } from "../components/house/house";
 
 export default function Home() {
-  const locationPickerRef = useRef<LocationPickerRef>(null);
+  const LocationPickerModalRef = useRef<ModalRef>(null);
 
   const handleLocationSave = () => {
     console.log("proceed");
   }
 
-  const openLocationPicker = () => {
-    locationPickerRef.current?.openModal();
+  const openLocationPickerModal = () => {
+    LocationPickerModalRef.current?.openModal();
   }
 
   return (
     <> 
       <main>
         <MainHeader />
-        <LocationPicker ref={locationPickerRef} onSave={handleLocationSave} />
-
-        <div className="flex flex-col gap-4">
-          <button onClick={openLocationPicker}>Open Location Picker</button>
+        <LocationPickerModal ref={LocationPickerModalRef} onSave={handleLocationSave} />
+        <div className="flex justify-center items-center h-screen">
+          <House />
         </div>
+
+        {/* <div className="flex flex-col gap-4">
+          <button onClick={openLocationPickerModal}>Open Location Picker</button>
+        </div> */}
       </main>
     </>
   );
