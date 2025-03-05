@@ -2,6 +2,7 @@ import { Location } from "../types/location";
 
 export const fetchWeather = async (location: Location) => {
   try {
+    // call NextJS API route to hide API key
     const res = await fetch(`/api/weather?lat=${location.latitude}&lon=${location.longitude}`);
 
     if (!res.ok) {

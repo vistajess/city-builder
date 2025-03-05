@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
-import MainHeader from "@/src/components/layout/main-header/main-header";
+import MainHeader from "@/src/components/main-header";
 import Providers from "./providers";
 import { HouseContextProvider } from "../contexts/house-context";
 
@@ -31,7 +31,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <HouseContextProvider>
-          <MainHeader />
           <Providers>{children}</Providers>
         </HouseContextProvider>
       </body>
