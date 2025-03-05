@@ -6,7 +6,7 @@ import { Label } from "../ui/label";
 import { BaseModal } from "./base-modal";
 import { useHouseContext } from "@/src/contexts/house-context";
 import { generateUUID } from "@/src/lib/id-generator";
-import { House, HouseFormData, HouseFormErrors } from "@/src/types/house";
+import { HouseFormData, HouseFormErrors } from "@/src/types/house";
 import { Toaster } from "../ui/sonner";
 import { toast } from "sonner";
 
@@ -17,7 +17,7 @@ export const ManageHouseModal = forwardRef((props, ref) => {
   const [errors, setErrors] = useState<HouseFormErrors>({});
   const [formData, setFormData] = useState<HouseFormData>({
     name: '',
-    floors: 0,
+    totalFloors: 0,
     color: ''
   });
   console.log(errors);
@@ -26,7 +26,7 @@ export const ManageHouseModal = forwardRef((props, ref) => {
       setIsOpen(true);
       setFormData({
         name: '',
-        floors: 0,
+        totalFloors: 0,
         color: ''
       });
       setErrors({});
@@ -43,8 +43,8 @@ export const ManageHouseModal = forwardRef((props, ref) => {
       newErrors.name = 'Name is required';
     }
 
-    if (formData.floors <= 0 || formData.floors > 400) {
-      newErrors.floors = 'Floors must be greater than 0 and less than 400';
+    if (formData.totalFloors <= 0 || formData.totalFloors > 400) {
+      newErrors.totalFloors = 'Floors must be greater than 0 and less than 400';
     }
 
     if (!formData.color) {
@@ -71,16 +71,14 @@ export const ManageHouseModal = forwardRef((props, ref) => {
     }
   }
 
-  const buildHouseData = (): House => {
+  const buildHouseData = () => {
     return {
       id: generateUUID(),
       name: formData.name,
-      floors: Array.from({ length: formData.floors }, (_, index) => ({
-        id: generateUUID(),
-        name: `Floor ${index + 1}`,
-        color: formData.color
-      })),
+      totalFloors: formData.totalFloors,
       color: formData.color,
+       // pass empty array for now as we will add floors in the context  
+      floors: [],
       location: savedLocation as any
     }
   }
@@ -114,10 +112,10 @@ export const ManageHouseModal = forwardRef((props, ref) => {
                 </p>}
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="floors">Number of floors</Label>
-                <Input id="floors" type="number" max="400" placeholder="Number of floors" onChange={(e) => handleOnchange(e, "floors")} />
-                {errors.floors && <p className="text-red-700 text-sm" >
-                  {errors.floors}
+                <Label htmlFor="totalFloors">Number of floors</Label>
+                <Input id="totalFloors" type="number" max="400" placeholder="Number of floors" onChange={(e) => handleOnchange(e, "totalFloors")} />
+                {errors.totalFloors && <p className="text-red-700 text-sm" >
+                  {errors.totalFloors}
                 </p>}
               </div>
               <div className="grid gap-2">

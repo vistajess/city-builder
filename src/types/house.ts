@@ -5,6 +5,7 @@ export interface House {
   id: string;
   name: string;
   color: string;
+  totalFloors: number;
   floors: Floor[];
   location: Location;
 }
@@ -12,12 +13,12 @@ export interface House {
 
 export interface HouseFormData {
   name: string;
-  floors: number;
   color: string;
+  totalFloors: number;
 }
 
 export interface HouseFormErrors {
   name?: string;
-  floors?: string;
+  totalFloors?: string;
   color?: string;
 }

@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
 import { createContext, useContext, useState } from "react";
+import { generateUUID } from "../lib/id-generator";
 import { House } from "../types/house";
 import { Location } from "../types/location";
 interface HouseContextType {
@@ -15,41 +16,55 @@ interface HouseContextType {
 
 export const HouseContext = createContext<HouseContextType>({
   savedLocation: null,
-  setSavedLocation: (location: Location) => { },
+  setSavedLocation: (location: Location) => {},
   houses: [],
-  getHousesByLocation: (locationId: string) => { },
-  addHouse: (house: House) => { },
-  updateHouse: (house: House) => { },
-  deleteHouse: (house: House) => { },
+  getHousesByLocation: (locationId: string) => {},
+  addHouse: (house: House) => {},
+  updateHouse: (house: House) => {},
+  deleteHouse: (house: House) => {},
 });
 
 export type HousesContextProviderProps = {
   children: React.ReactNode;
 };
 
-export const HouseContextProvider = ({ children }: HousesContextProviderProps) => {
+export const HouseContextProvider = ({
+  children,
+}: HousesContextProviderProps) => {
   const [houses, setHouses] = useState<House[]>([]);
   const [savedLocation, setSavedLocation] = useState<Location | null>(null);
 
   const handleSavedLocation = (location: Location) => {
     setSavedLocation(location);
-  }
+  };
 
   const getHousesByLocation = (locationId: string) => {
     setHouses(houses.filter((h) => h.location.id === locationId));
-  }
+  };
 
   const addHouse = (house: House) => {
-    setHouses([...houses, house]);
-  }
+    setHouses((prevHouses) => {
+      return [
+        ...prevHouses,
+        {
+          ...house,
+          floors: Array.from({ length: house.totalFloors }, (_, index) => ({
+            level: index + 1,
+            floorId: generateUUID(),
+            color: house.color,
+          })),
+        },
+      ];
+    });
+  };
 
   const updateHouse = (house: House) => {
     setHouses(houses.map((h) => (h.id === house.id ? house : h)));
-  }
+  };
 
   const deleteHouse = (house: House) => {
     setHouses(houses.filter((h) => h.id !== house.id));
-  }
+  };
 
   const contextvalue: HouseContextType = {
     savedLocation,
@@ -59,7 +74,7 @@ export const HouseContextProvider = ({ children }: HousesContextProviderProps) =
     addHouse,
     updateHouse,
     deleteHouse,
-  }
+  };
 
   return (
     <HouseContext.Provider value={contextvalue}>
@@ -71,7 +86,7 @@ export const HouseContextProvider = ({ children }: HousesContextProviderProps) =
 export const useHouseContext = () => {
   const context = useContext(HouseContext);
   if (context === undefined) {
-    throw new Error('useHouseContext must be used within a HouseProvider');
+    throw new Error("useHouseContext must be used within a HouseProvider");
   }
   return context;
 };

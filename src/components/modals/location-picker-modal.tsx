@@ -12,7 +12,7 @@ import { Loader } from "../loader/loader";
 import { Button } from "../ui/button";
 import { WeatherCard } from "../weather-card";
 
-const LocationPickerModal = forwardRef(({ onSave }: { onSave: () => void }, ref) => {
+const LocationPickerModal = forwardRef((props, ref) => {
   const { setSavedLocation } = useHouseContext();
   const [currentLocation, setCurrentLocation] = useState<Location>(AVAILABLE_LOCATIONS[0]);
   const { isOpen, setIsOpen } = useModal(true);
@@ -43,7 +43,6 @@ const LocationPickerModal = forwardRef(({ onSave }: { onSave: () => void }, ref)
   }, [data]);
 
   const handleSave = () => {
-    onSave();
     setSavedLocation({ ...currentLocation, weather: weatherData });
     setIsOpen(false);
   }
@@ -80,7 +79,6 @@ const LocationPickerModal = forwardRef(({ onSave }: { onSave: () => void }, ref)
         </Select>
 
         <div>
-
           <div className="text-sm text-muted-foreground">
             {isLoading ?
               (<div className="w-full flex justify-center items-center h-[260px]">

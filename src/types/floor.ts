@@ -1,4 +1,5 @@
 export interface Floor {
-  id: string;
+  floorId: string;
+  level: number;
   color: string;
 }
