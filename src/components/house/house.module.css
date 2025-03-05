@@ -1,33 +1,55 @@
 .house-container {
-  position: relative;
-}
-
-/* .roof {
-  width: 0;
-  height: 0;
-  border-left: 50px solid transparent;
-  border-right: 50px solid transparent;
-  border-bottom: 50px solid brown;
   position: absolute;
-  top: -50px;
-  left: 0;
-} */
+  bottom: 0;
+}
 
 .roof {
   width: 0;
   height: 0;
-  border-left: 220px solid transparent;
-  border-right: 220px solid transparent;
-  border-bottom: 80px solid #e65837;
+  border-left: 90px solid transparent;
+  border-right: 90px solid transparent;
+  border-bottom: 90px solid #8C2F39;
   position: absolute;
-  top: -40px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: -90px;
+  left: 0;
+} 
+
+.door {
+  width: 40px;
+  height: 60px;
+  background-color: #D62828;
+  position: absolute;
+  right: 20px;
+  bottom: 0;
+}
+
+.window {
+  width: 40px;
+  height: 40px;
+  background-color: #264653;
+  position: absolute;
+}
+
+.window.one {
+  left: 30px;
+  top: 20px;
+}
+
+.window.two {
+  left: 115px;
+  bottom: 20px;
 }
 
 .floor {
-  width: 100px;
-  height: 100px;
-  background-color: brown;
+  width: 180px;
+  height: 80px;
+  background-color: #F2E9E4;
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.floor:hover {
+  border: 2px solid black;
+  cursor: pointer;
 }
 

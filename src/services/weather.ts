@@ -11,7 +11,7 @@ export const fetchWeather = async (location: Location) => {
     const data = await res.json();
 
     if (!data) {
-      throw new Error(data.message ||"No weather data received");
+      throw new Error(data.message || "No weather data received");
     }
 
     return data;
