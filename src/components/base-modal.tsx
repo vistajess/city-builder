@@ -1,31 +1,28 @@
-import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 
-export type DialogModalProps = {
+export type BaseModalProps = {
   children: React.ReactNode,
   isOpen: boolean,
-  onPrimaryClick: () => void,
   description: string,
-  primaryButtonText: string,
-  triggerText: string,
   title: string,
-  footerChildren: React.ReactNode
+  footerChildren: React.ReactNode,
+  setIsOpen: (open: boolean) => void
 }
 
-export const DialogModal = ({
+export const BaseModal = ({
   children,
   isOpen,
-  onPrimaryClick,
   description,
-  primaryButtonText,
-  triggerText,
   title,
-  footerChildren
-}: DialogModalProps) => {
+  footerChildren,
+  setIsOpen
+}: BaseModalProps) => {
+
+  
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{triggerText}</Button>
+
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -34,9 +31,7 @@ export const DialogModal = ({
             {description}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
           {children}
-        </div>
         <DialogFooter>
           {footerChildren}
         </DialogFooter>

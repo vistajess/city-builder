@@ -5,7 +5,7 @@ export interface Location {
   name: string;
   latitude: number;
   longitude: number;
-  weather?: Weather;
+  weather?: Weather | null;
 }
 
 export interface LocationWithHouses extends Location {
