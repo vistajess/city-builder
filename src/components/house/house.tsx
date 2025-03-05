@@ -1,16 +1,22 @@
+import styles from "./house.module.css";
+
 export const House = () => {
   return (
-    <div>
-      <h1>House</h1>
-      <House.Floor />
+    <div className={styles["house-container"]}>
+      <div className={styles.roof}></div>
+      <div className={styles.body}>
+        <div className={styles.window}></div>
+        <div className={styles.door}></div>
+      </div>
     </div>
   );
 };
 
 House.Floor = () => {
   return (
-    <div>
-      <h1>Floor</h1>
+    <div className={styles["floor-container"]}>
+      <div className={styles.window}></div>
+      <div className={styles.door}></div>
     </div>
   );
 };
