@@ -1,0 +1,7 @@
+.color-picker {
+  width: 100% !important;
+}
+
+.color-picker  > div:nth-child(1) {
+  display: none;
+}

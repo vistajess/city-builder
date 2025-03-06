@@ -32,6 +32,9 @@
   position: absolute;
   right: 20px;
   bottom: 0;
+
+  background: #b22222;
+  border: 2px solid #8b0000;
 }
 
 /* Window */  
@@ -40,6 +43,9 @@
   height: 40px;
   background-color: #264653;
   position: absolute;
+  background: #2a3d45;
+  border-radius: 4px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 
 .window.one {

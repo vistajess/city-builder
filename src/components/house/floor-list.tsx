@@ -17,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { Toaster, toast } from "sonner";
 
 export const FloorList = ({
   floors,
@@ -56,8 +57,7 @@ export const FloorList = ({
     >
       <Popover>
         <PopoverTrigger asChild>
-          <div className={`${styles.roof}`} onClick={handleSelectHouse}>
-          </div>
+          <div className={`${styles.roof}`} onClick={handleSelectHouse}></div>
         </PopoverTrigger>
         <PopoverContent side="top" className="w-80">
           <FloorList.RoofPopover />
@@ -86,82 +86,82 @@ FloorList.RoofPopover = () => {
   const handleDeleteHouse = () => {
     if (selectedHouse) {
       deleteHouse(selectedHouse.id);
+      toast.success("House deleted successfully");
     }
   };
 
   return (
-    <div className="grid gap-4">
-      <div className="space-y-2">
-        <h4 className="font-medium leading-none">House Details</h4>
-        <p className="text-sm text-muted-foreground">
-          See the details of the house.
-        </p>
-      </div>
-      <div className="grid gap-2">
-        <div className="grid grid-cols-3 items-center gap-4">
-          <Label htmlFor="width">Name</Label>
-          {selectedHouse?.name}
+    <>
+      <Toaster />
+      <div className="grid gap-4">
+        <div className="space-y-2">
+          <h4 className="font-medium leading-none">House Details</h4>
+          <p className="text-sm text-muted-foreground">
+            See the details of the house.
+          </p>
         </div>
-        <div className="grid grid-cols-3 items-center gap-4">
-          <Label htmlFor="maxWidth">Number of floors</Label>
-          {selectedHouse?.totalFloors}
-        </div>
-        <div className="grid grid-cols-3 items-center gap-4">
-          <Label htmlFor="height">Color</Label>
-          {selectedHouse?.color}
-        </div>
-        <div className="flex gap-2 mt-3 items-center justify-center">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="flex items-center gap-1 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 transition-all"
-                  // onClick={openManageHouseModal}
-                >
-                  <WrenchScrewdriverIcon className="w-4 h-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Open a manage house modal and edit the house details</p>
-              </TooltipContent>
-            </Tooltip>
+        <div className="grid gap-2">
+          <div className="grid grid-cols-2 items-center gap-4">
+            <Label htmlFor="width">Name</Label>
+            {selectedHouse?.name}
+          </div>
+          <div className="grid grid-cols-2 items-center gap-4">
+            <Label htmlFor="maxWidth">Number of floors</Label>
+            {selectedHouse?.totalFloors}
+          </div>
+          <div className="flex gap-2 mt-3 items-center justify-center">
+            <TooltipProvider>
+              <Tooltip disableHoverableContent>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="flex items-center gap-1 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 transition-all"
+                    // onClick={openManageHouseModal}
+                  >
+                    <WrenchScrewdriverIcon className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Edit the house details</p>
+                </TooltipContent>
+              </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="flex items-center gap-1 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 transition-all"
-                  // onClick={openManageHouseModal}
-                >
-                  <CubeTransparentIcon className="w-4 h-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Clone the selected house</p>
-              </TooltipContent>
-            </Tooltip>
+              <Tooltip disableHoverableContent>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="flex items-center gap-1 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 transition-all"
+                    // onClick={openManageHouseModal}
+                  >
+                    <CubeTransparentIcon className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Clone the selected house</p>
+                </TooltipContent>
+              </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="flex items-center gap-1 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 transition-all"
-                  onClick={handleDeleteHouse}
-                >
-                  <TrashIcon className="w-4 h-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Delete the selected house</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+              <Tooltip disableHoverableContent>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="flex items-center gap-1 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 transition-all"
+                    onClick={handleDeleteHouse}
+                  >
+                    <TrashIcon className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Delete the selected house</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
