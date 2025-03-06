@@ -1,4 +1,5 @@
-import { Floor } from "@/src/types/floor";
+import { Floor as FloorType } from "@/src/types/floor";
+import { FloorList } from "./floor-list";
 import styles from "./house.module.css";
 
 export const House = ({
@@ -6,46 +7,22 @@ export const House = ({
   floors,
 }: {
   index: number;
-  floors: Floor[];
+  floors: FloorType[];
 }) => {
   const reversedFloors = [...floors].reverse();
+
+  const MARGIN_BETWEEN_HOUSES = 30;
+  const HOUSE_WIDTH = 200;
 
   return (
     <>
       <div
         className={`${styles["house-container"]}`}
-        style={{ left: `${index * 200}px` }}
+        style={{ left: `${index * HOUSE_WIDTH + MARGIN_BETWEEN_HOUSES}px` }}
       >
-        <div className={styles.roof}></div>
-        {floors?.length > 0 &&
-          reversedFloors.map((floor) => (
-            <House.Floor key={floor.floorId} floor={floor} />
-          ))}
+        
+        <FloorList floors={reversedFloors} />
       </div>
     </>
-  );
-};
-
-House.Floor = ({ floor }: { floor: Floor }) => {
-  const windowCount = floor.level === 1 ? 1 : 2;
-  const Windows =
-    windowCount === 1 ? (
-      <div className={`${styles.window} ${styles.one}`}></div>
-    ) : (
-      <>
-        <div className={`${styles.window} ${styles.one}`}></div>
-        <div className={`${styles.window} ${styles.two}`}></div>
-      </>
-    );
-  return (
-    <div className={styles["floor-container"]}>
-      <div
-        className={`${styles.floor}`}
-        style={{ backgroundColor: floor.color }}
-      >
-        {Windows}
-        {floor.level === 1 && <div className={styles.door}></div>}
-      </div>
-    </div>
   );
 };

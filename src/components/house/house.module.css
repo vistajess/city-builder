@@ -3,6 +3,7 @@
   bottom: 0;
 }
 
+/* Roof */
 .roof {
   width: 0;
   height: 0;
@@ -12,8 +13,26 @@
   position: absolute;
   top: -90px;
   left: 0;
+  cursor: pointer;
 } 
 
+.roof .wrench-screwdriver-icon {
+  opacity: 0;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+  color: #fff;
+  position: relative;
+  top: 40px;
+  right: 15px;
+  transition: opacity 0.3s ease;
+}
+
+.roof:hover .wrench-screwdriver-icon {
+  opacity: 1;
+}
+
+/* Door */
 .door {
   width: 40px;
   height: 60px;
@@ -23,6 +42,7 @@
   bottom: 0;
 }
 
+/* Window */  
 .window {
   width: 40px;
   height: 40px;
@@ -40,6 +60,7 @@
   bottom: 20px;
 }
 
+/* Floor */
 .floor {
   width: 180px;
   height: 80px;
@@ -53,3 +74,7 @@
   cursor: pointer;
 }
 
+/* .floor-list-wrapper > div {
+  position: absolute;
+  bottom: 0;
+} */

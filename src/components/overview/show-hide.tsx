@@ -4,13 +4,15 @@ import { TooltipProvider } from "../ui/tooltip";
 import { TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Tooltip } from "../ui/tooltip";
 
+interface ShowHideProps {
+  isOverviewVisible: boolean;
+  toggleShowHide: () => void;
+}
+
 export const ShowHide = ({
   isOverviewVisible,
   toggleShowHide,
-}: {
-  isOverviewVisible: boolean;
-  toggleShowHide: () => void;
-}) => {
+}: ShowHideProps) => {
   const Icon = isOverviewVisible ? EyeSlashIcon : EyeIcon;
 
   return (
@@ -24,7 +26,7 @@ export const ShowHide = ({
             />
           </TooltipTrigger>
           <TooltipContent>
-            <p>Hide overview</p>
+            <p>{isOverviewVisible ? "Hide overview" : "Show overview"}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

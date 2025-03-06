@@ -1,5 +1,13 @@
-'use client';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/src/components/ui/select";
+"use client";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { AVAILABLE_LOCATIONS } from "../../constants/location";
 import { useHouseContext } from "../../contexts/house-context";
@@ -13,8 +21,10 @@ import { Button } from "../ui/button";
 import { WeatherCard } from "../weather-card";
 
 const LocationPickerModal = forwardRef((props, ref) => {
-  const { setSavedLocation } = useHouseContext();
-  const [currentLocation, setCurrentLocation] = useState<Location>(AVAILABLE_LOCATIONS[0]);
+  const { savedLocation, setSavedLocation } = useHouseContext();
+  const [currentLocation, setCurrentLocation] = useState<Location>(
+    AVAILABLE_LOCATIONS[0]
+  );
   const { isOpen, setIsOpen } = useModal(true);
   const [weatherData, setWeatherData] = useState<Weather | null>(null);
   const { data, isLoading, isError, error } = useWeatherQuery(currentLocation);
@@ -25,7 +35,7 @@ const LocationPickerModal = forwardRef((props, ref) => {
     },
     closeModal() {
       setIsOpen(false);
-    }
+    },
   }));
 
   useEffect(() => {
@@ -37,7 +47,7 @@ const LocationPickerModal = forwardRef((props, ref) => {
         humidity: data.main?.humidity,
         windSpeed: data.wind?.speed,
         icon: data.weather[0]?.icon,
-        description: data.weather[0]?.description
+        description: data.weather[0]?.description,
       });
     }
   }, [data]);
@@ -45,13 +55,13 @@ const LocationPickerModal = forwardRef((props, ref) => {
   const handleSave = () => {
     setSavedLocation({ ...currentLocation, weather: weatherData });
     setIsOpen(false);
-  }
+  };
 
   const handleSelectLocation = (locationId: string) => {
-    setCurrentLocation(prevcurrentLocation => {
-      return AVAILABLE_LOCATIONS.find(location => location.id === locationId)
+    setCurrentLocation((prevcurrentLocation) => {
+      return AVAILABLE_LOCATIONS.find((location) => location.id === locationId);
     });
-  }
+  };
 
   return (
     <BaseModal
@@ -59,10 +69,17 @@ const LocationPickerModal = forwardRef((props, ref) => {
       setIsOpen={setIsOpen}
       description="Choose a location where you want to build your city."
       title="Choose Desired Location"
-      footerChildren={<Button disabled={!weatherData || isLoading} onClick={handleSave}>Save</Button>}
+      footerChildren={
+        <Button disabled={!weatherData || isLoading} onClick={handleSave}>
+          Save
+        </Button>
+      }
     >
       <div className="grid gap-4 py-4">
-        <Select defaultValue={AVAILABLE_LOCATIONS[0].id} onValueChange={(value) => handleSelectLocation(value)}>
+        <Select
+          defaultValue={AVAILABLE_LOCATIONS[0].id}
+          onValueChange={(value) => handleSelectLocation(value)}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Choose a location" />
           </SelectTrigger>
@@ -80,11 +97,13 @@ const LocationPickerModal = forwardRef((props, ref) => {
 
         <div>
           <div className="text-sm text-muted-foreground">
-            {isLoading ?
-              (<div className="w-full flex justify-center items-center h-[260px]">
+            {isLoading ? (
+              <div className="w-full flex justify-center items-center h-[260px]">
                 <Loader />
-              </div>) :
-              (weatherData && <WeatherCard weather={weatherData} />)}
+              </div>
+            ) : (
+              weatherData && <WeatherCard weather={weatherData} />
+            )}
             {isError && <div>{error.message}</div>}
           </div>
         </div>
@@ -94,4 +113,3 @@ const LocationPickerModal = forwardRef((props, ref) => {
 });
 
 export default LocationPickerModal;
-

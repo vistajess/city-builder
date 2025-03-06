@@ -7,7 +7,7 @@ import { Location } from "../types/location";
 interface HouseContextType {
   savedLocation: Location | null;
   setSavedLocation: (location: Location) => void;
-  houses: House[];
+  houses: Map<string, House>;
   getHousesByLocation: (locationId: string) => void;
   addHouse: (house: House) => void;
   updateHouse: (house: House) => void;
@@ -17,7 +17,7 @@ interface HouseContextType {
 export const HouseContext = createContext<HouseContextType>({
   savedLocation: null,
   setSavedLocation: (location: Location) => {},
-  houses: [],
+  houses: new Map<string, House>(),
   getHousesByLocation: (locationId: string) => {},
   addHouse: (house: House) => {},
   updateHouse: (house: House) => {},
@@ -31,7 +31,7 @@ export type HousesContextProviderProps = {
 export const HouseContextProvider = ({
   children,
 }: HousesContextProviderProps) => {
-  const [houses, setHouses] = useState<House[]>([]);
+  const [houses, setHouses] = useState<Map<string, House>>(new Map());
   const [savedLocation, setSavedLocation] = useState<Location | null>(null);
 
   const handleSavedLocation = (location: Location) => {
@@ -44,26 +44,31 @@ export const HouseContextProvider = ({
 
   const addHouse = (house: House) => {
     setHouses((prevHouses) => {
-      return [
+      return new Map([
         ...prevHouses,
-        {
+        [house.id, {
           ...house,
           floors: Array.from({ length: house.totalFloors }, (_, index) => ({
             level: index + 1,
             floorId: generateUUID(),
             color: house.color,
           })),
-        },
-      ];
+        }],
+      ]);
     });
   };
 
   const updateHouse = (house: House) => {
-    setHouses(houses.map((h) => (h.id === house.id ? house : h)));
+    // setHouses(houses.map((h) => (h.id === house.id ? house : h)));
   };
 
   const deleteHouse = (house: House) => {
-    setHouses(houses.filter((h) => h.id !== house.id));
+    // setHouses(houses.filter((h) => h.id !== house.id));
+    setHouses((prevHouses) => {
+      const newHouses = new Map(prevHouses);
+      newHouses.delete(house.id);
+      return newHouses;
+    });
   };
 
   const contextvalue: HouseContextType = {
@@ -73,7 +78,7 @@ export const HouseContextProvider = ({
     getHousesByLocation,
     addHouse,
     updateHouse,
-    deleteHouse,
+    deleteHouse
   };
 
   return (

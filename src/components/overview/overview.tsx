@@ -26,21 +26,20 @@ const Overview = () => {
     setIsOverviewVisible(!isOverviewVisible);
   };
 
-  // if no location is saved, show the location picker modal
-  if (!savedLocation) {
-    return <LocationPickerModal ref={LocationPickerModalRef} />;
-  }
 
-  const totalFloors = houses.reduce(
+  const totalFloors = Array.from(houses.values()).reduce(
     (acc, house) => acc + (house.floors?.length || 0),
     0
   );
 
   return (
     <>
-      <div className={`absolute top-5 right-5 z-10`}>
-        <div className="absolute top-0 right-0 w-10 h-10 flex items-center justify-center z-10">
-          <ShowHide
+      <LocationPickerModal ref={LocationPickerModalRef} />
+
+      {savedLocation && (
+        <div className={`absolute top-5 right-5 z-10`}>
+          <div className="absolute top-0 right-0 w-10 h-10 flex items-center justify-center z-10">
+            <ShowHide
             isOverviewVisible={isOverviewVisible}
             toggleShowHide={handleHideOverview}
           />
@@ -60,9 +59,10 @@ const Overview = () => {
             totalFloors={totalFloors}
             openManageHouseModal={openManageHouseModal}
             openLocationPickerModal={openLocationPickerModal}
-          />
+            />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
