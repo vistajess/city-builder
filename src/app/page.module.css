@@ -1,0 +1,7 @@
+.sky {
+  background: linear-gradient(to bottom, #a3d5ff, #dff3ff);
+}
+
+.ground {
+  background: linear-gradient(to bottom, #3a7d44, #5aa469);
+}
