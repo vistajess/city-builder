@@ -1,15 +1,17 @@
 import { useHouseContext } from "@/src/contexts/house-context";
+import { useRef } from "react";
 import { House } from "./house";
 export const HouseList = () => {
   const { houses } = useHouseContext();
+  const housesArray = Array.from(houses.entries());
 
   return (
-    <div className="h-screen">
-      <div className="house-list absolute bottom-0 h-auto flex gap-10 w-full">
-        {houses.map((house, index) => (
-          <House key={house.id} index={index} floors={house.floors} />
-        ))}
-      </div>
+    <div
+      className="absolute bottom-[150px] w-full max-h-[calc(100vh-150px)] overflow-y-auto flex flex-row gap-4 p-4 h-[500px]"
+    >
+      {housesArray.map(([houseId, house], index) => (
+        <House key={houseId} index={index} floors={house.floors} />
+      ))}
     </div>
   );
 };

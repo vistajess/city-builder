@@ -1,13 +1,21 @@
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 export type BaseModalProps = {
-  children: React.ReactNode,
-  isOpen: boolean,
-  description: string,
-  title: string,
-  footerChildren: React.ReactNode,
-  setIsOpen: (open: boolean) => void
-}
+  children: React.ReactNode;
+  isOpen: boolean;
+  description: string;
+  title: string;
+  footerChildren: React.ReactNode;
+  setIsOpen: (open: boolean) => void;
+};
 
 export const BaseModal = ({
   children,
@@ -15,26 +23,23 @@ export const BaseModal = ({
   description,
   title,
   footerChildren,
-  setIsOpen
+  setIsOpen,
 }: BaseModalProps) => {
-
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogTrigger asChild></DialogTrigger>
+      <DialogContent
+        className="sm:max-w-[425px]"
+        onEscapeKeyDown={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>
-            {description}
-          </DialogDescription>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-          {children}
-        <DialogFooter>
-          {footerChildren}
-        </DialogFooter>
+        {children}
+        <DialogFooter>{footerChildren}</DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

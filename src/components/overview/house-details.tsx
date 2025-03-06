@@ -4,9 +4,17 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import { Button } from "../ui/button";
 import { TooltipContent } from "../ui/tooltip";
 
-import { Tooltip, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { House } from "@/src/types/house";
 import { Location } from "@/src/types/location";
+import { Tooltip, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+
+interface HouseDetailsProps {
+  houses: Map<string, House>;
+  savedLocation: Location;
+  totalFloors: number;
+  openManageHouseModal: () => void;
+  openLocationPickerModal: () => void;
+}
 
 export const HouseDetails = ({
   houses,
@@ -14,13 +22,7 @@ export const HouseDetails = ({
   totalFloors,
   openManageHouseModal,
   openLocationPickerModal,
-}: {
-  houses: House[];
-  savedLocation: Location;
-  totalFloors: number;
-  openManageHouseModal: () => void;
-  openLocationPickerModal: () => void;
-}) => {
+}: HouseDetailsProps) => {
   return (
     <div className="bg-white p-4 rounded-b-lg shadow-lg w-[350px] border-blue-300/20">
       <TooltipProvider>
@@ -29,7 +31,7 @@ export const HouseDetails = ({
             <TooltipTrigger asChild>
               <div className="flex items-center w-1/2 gap-2 cursor-help hover:text-blue-500 transition-colors">
                 <div className="text-sm font-medium">Houses:</div>
-                <div className="font-bold">{houses.length}</div>
+                <div className="font-bold">{Array.from(houses.values()).length}</div>
               </div>
             </TooltipTrigger>
             <TooltipContent>
