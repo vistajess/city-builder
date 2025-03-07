@@ -1,6 +1,10 @@
 import { FC } from "react";
-import { TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
-import { Tooltip } from "@radix-ui/react-tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 import { useHouseContext } from "@/src/contexts/house-context";
 import { ModalRef } from "@/src/types/modal";
@@ -8,7 +12,6 @@ import { useRef } from "react";
 import { toast } from "sonner";
 import { ManageHouseModal } from "../modals/manage-house-modal";
 import { Label } from "../ui/label";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Button } from "../ui/button";
 import { CubeTransparentIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { WrenchScrewdriverIcon } from "@heroicons/react/24/outline";
