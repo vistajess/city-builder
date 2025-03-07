@@ -14,7 +14,7 @@ interface HouseContextType {
   updateHouse: (house: House) => void;
   deleteHouse: (id: string) => void;
   selectedHouse: House | null;
-  setSelectedHouse: (id: string) => void;
+  setSelectedHouse: (id: string | null) => void;
 }
 
 export const HouseContext = createContext<HouseContextType>({
@@ -45,7 +45,12 @@ export const HouseContextProvider = ({
     setSavedLocation(location);
   };
 
-  const handleSelectHouse = (houseId: string) => {
+  const handleSelectHouse = (houseId: string | null) => {
+    if (houseId === null) {
+      setSelectedHouse(null);
+      return;
+    }
+
     const house = houses.get(houseId);
 
     if (house) {
@@ -75,7 +80,7 @@ export const HouseContextProvider = ({
               level: index + 1,
               floorId: generateUUID(),
               color: house.color,
-            })),
+            }))
           },
         ],
       ]);
@@ -91,7 +96,22 @@ export const HouseContextProvider = ({
   };
 
   const updateHouse = (house: House) => {
-    console.log("updateHouse", house);
+    setHouses((prevHouses) => {
+      return new Map([
+        ...prevHouses,
+        [
+          house.id,
+          {
+            ...house,
+            floors: Array.from({ length: house.totalFloors }, (_, index) => ({
+              level: index + 1,
+              floorId: generateUUID(),
+              color: house.color,
+            }))
+          }
+        ]
+      ]);
+    });
     // setHouses(houses.map((h) => (h.id === house.id ? house : h)));
   };
 

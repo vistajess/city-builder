@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { Cloud } from "../components/cloud";
 import { HouseList } from "../components/house/house-list";
 import Overview from "../components/overview/overview";
@@ -7,8 +7,16 @@ import styles from "./page.module.css";
 import { Toaster } from "../components/ui/sonner";
 import { SkyBackground } from "../components/sky-background";
 import { useHouseContext } from "../contexts/house-context";
+import { ManageHouseModal } from "../components/modals/manage-house-modal";
+import { ModalRef } from "../types/modal";
 export default function Home() {
   const { savedLocation } = useHouseContext();
+  const manageHouseModalRef = useRef<ModalRef>(null);
+
+  const handleOpenManageHouseModal = useCallback(() => {
+    manageHouseModalRef.current?.openModal();
+  }, []);
+  
   const clouds = useMemo(
     () => [
       { size: 150, top: "25%", duration: 22, opacity: 0.7, direction: "left" },
@@ -23,9 +31,10 @@ export default function Home() {
     <>
       <main>
         <Toaster />
-        <Overview />
+        <Overview openManageHouseModal={handleOpenManageHouseModal} />
+        
+        <ManageHouseModal ref={manageHouseModalRef} />
 
-        {/* <div className={`${styles.sky}`}></div> */}
         <SkyBackground weatherCode={savedLocation?.weather?.icon || "01d"} />
         <div className={`absolute h-[50vh] w-full top-0 overflow-hidden`}>
           {clouds.map((cloud, index) => (
