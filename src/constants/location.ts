@@ -56,7 +56,7 @@ export const AVAILABLE_LOCATIONS: Location[] = [
     longitude: 151.2153,
   },
   {
-    id: "9",
+    id: "10",
     name: "Madrid",
     latitude: 40.4168,
     longitude: -3.7038,

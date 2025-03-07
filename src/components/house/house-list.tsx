@@ -2,9 +2,8 @@ import { useFilteredHouses } from "@/src/hooks/useFilteredHouses";
 import { House } from "./house";
 
 export const HouseList = () => {
-  // const { houses, getHousesByLocation, savedLocation} = useHouseContext();
   const { filteredHouses } = useFilteredHouses();
-  
+
   return (
     <div
       className="absolute bottom-[150px] w-full max-h-[calc(100vh-150px)] overflow-y-hidden overflow-x-auto flex flex-row items-end h-[700px] overflow-hidden"

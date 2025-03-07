@@ -34,6 +34,9 @@ const LocationPickerModal = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     openModal() {
       setIsOpen(true);
+      setCurrentLocation(() => {
+        return AVAILABLE_LOCATIONS.find((location) => location.id === savedLocation?.id) || AVAILABLE_LOCATIONS[0];
+      });
     },
     closeModal() {
       setIsOpen(false);
@@ -79,7 +82,7 @@ const LocationPickerModal = forwardRef((props, ref) => {
     >
       <div className="grid gap-4 py-4">
         <Select
-          defaultValue={AVAILABLE_LOCATIONS[0].id}
+          defaultValue={currentLocation.id}
           onValueChange={(value) => handleSelectLocation(value)}
         >
           <SelectTrigger className="w-full">

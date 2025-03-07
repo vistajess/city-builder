@@ -17,7 +17,6 @@ export const Floor = ({ floor }: { floor: FloorType }) => {
 Floor.Normal = (({ floor }: { floor: FloorType }) => {
   return (
     <div className={`${styles.floor}`} style={{ backgroundColor: floor.color }}>
-      {/* <div>{floor.level}</div> */}
       <div className={`${styles.window} ${styles.one}`}></div>
       <div className={`${styles.window} ${styles.two}`}></div>
     </div>
@@ -30,7 +29,6 @@ Floor.Normal.displayName = "Floor.Normal";
 Floor.WithDoor = (({ floor }: { floor: FloorType }) => {
   return (
     <div className={`${styles.floor}`} style={{ backgroundColor: floor.color }}>
-      {/* <div>{floor.level}</div> */}
       <div className={`${styles.window} ${styles.one}`}></div>
       <div className={styles.door}></div>
     </div>
