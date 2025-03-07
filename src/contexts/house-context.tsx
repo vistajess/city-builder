@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import { generateUUID } from "../lib/id-generator";
 import { House } from "../types/house";
 import { Location } from "../types/location";
@@ -8,8 +8,9 @@ interface HouseContextType {
   savedLocation: Location | null;
   setSavedLocation: (location: Location) => void;
   houses: Map<string, House>;
-  getHousesByLocation: (locationId: string) => void;
+  getHousesByLocation: (locationId: string) => Map<string, House>;
   addHouse: (house: House) => void;
+  cloneHouse: (id: string) => void;
   updateHouse: (house: House) => void;
   deleteHouse: (id: string) => void;
   selectedHouse: House | null;
@@ -18,14 +19,15 @@ interface HouseContextType {
 
 export const HouseContext = createContext<HouseContextType>({
   savedLocation: null,
-  setSavedLocation: (location: Location) => {},
+  setSavedLocation: () => {},
   houses: new Map<string, House>(),
-  getHousesByLocation: (locationId: string) => {},
-  addHouse: (house: House) => {},
-  updateHouse: (house: House) => {},
-  deleteHouse: (id: string) => {},
+  getHousesByLocation: () => new Map<string, House>(),
+  addHouse: () => {},
+  cloneHouse: () => {},
+  updateHouse: () => {},
+  deleteHouse: () => {},
   selectedHouse: null,
-  setSelectedHouse: (id: string) => {},
+  setSelectedHouse: () => {}
 });
 
 export type HousesContextProviderProps = {
@@ -45,38 +47,55 @@ export const HouseContextProvider = ({
 
   const handleSelectHouse = (houseId: string) => {
     const house = houses.get(houseId);
-    console.log("select house", house);
+
     if (house) {
       setSelectedHouse(house);
     }
-  }
-
-  const getHousesByLocation = (locationId: string) => {
-    setHouses(houses.filter((h) => h.location.id === locationId));
   };
 
-  const addHouse = (house: House) => {
+  const getHousesByLocation = useCallback((locationId: string) => {
+    return new Map(
+      [...houses].filter(([, house]) => house.location.id === locationId)
+    );
+  }, [houses]);
+
+  const addHouse = (house: House, isClone: boolean = false) => {
+    const houseId = isClone ? generateUUID() : house.id;
+    const houseName = isClone ? `${house.name} (Copy)` : house.name;
+
     setHouses((prevHouses) => {
       return new Map([
         ...prevHouses,
-        [house.id, {
-          ...house,
-          floors: Array.from({ length: house.totalFloors }, (_, index) => ({
-            level: index + 1,
-            floorId: generateUUID(),
-            color: house.color,
-          })),
-        }],
+        [
+          houseId,
+          {
+            ...house,
+            name: houseName,
+            floors: Array.from({ length: house.totalFloors }, (_, index) => ({
+              level: index + 1,
+              floorId: generateUUID(),
+              color: house.color,
+            })),
+          },
+        ],
       ]);
     });
   };
 
+  const cloneHouse = (id: string) => {
+    const house = houses.get(id);
+
+    if (house) {
+      addHouse(house, true);
+    }
+  };
+
   const updateHouse = (house: House) => {
+    console.log("updateHouse", house);
     // setHouses(houses.map((h) => (h.id === house.id ? house : h)));
   };
 
   const deleteHouse = (id: string) => {
-    // setHouses(houses.filter((h) => h.id !== house.id));
     setHouses((prevHouses) => {
       const newHouses = new Map(prevHouses);
       newHouses.delete(id);
@@ -90,6 +109,7 @@ export const HouseContextProvider = ({
     houses,
     getHousesByLocation,
     addHouse,
+    cloneHouse,
     updateHouse,
     deleteHouse,
     selectedHouse,

@@ -45,9 +45,21 @@ export const AVAILABLE_LOCATIONS: Location[] = [
   },
   {
     id: "8",
+    name: "Sofia",
+    latitude: 42.6977,
+    longitude: 23.3219,
+  },
+  {
+    id: "9",
     name: "Sydney",
     latitude: -33.8688,
     longitude: 151.2153,
+  },
+  {
+    id: "9",
+    name: "Madrid",
+    latitude: 40.4168,
+    longitude: -3.7038,
   }
 ];
 

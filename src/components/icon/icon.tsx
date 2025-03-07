@@ -1,5 +1,7 @@
+import { JSX } from 'react';
+
 // Rain SVG Icon
-const RainIcon = () => (
+const RainIcon = (): JSX.Element => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className="w-30 h-30"
@@ -35,7 +37,6 @@ const SnowIcon = () => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    className="lucide lucide-snowflake"
   >
     <path d="m10 20-1.25-2.5L6 18" />
     <path d="M10 4 8.75 6.5 6 6" />
@@ -52,7 +53,7 @@ const SnowIcon = () => (
   </svg>
 );
 
-const SunIcon = () => (
+const SunIcon = (): JSX.Element => (
   <svg
     className="w-30 h-30"
     xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +70,7 @@ const SunIcon = () => (
   </svg>
 );
 
-const CloudIcon = () => (
+const CloudIcon = (): JSX.Element => (
   <svg
     className="w-30 h-30"
     xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +87,7 @@ const CloudIcon = () => (
   </svg>
 );
 
-const MoonIcon = () => (
+const MoonIcon = (): JSX.Element => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -101,7 +102,7 @@ const MoonIcon = () => (
   </svg>
 );
 
-const ThunderIcon = () => (
+const ThunderIcon = (): JSX.Element => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -119,7 +120,7 @@ const ThunderIcon = () => (
   </svg>
 );
 
-const FogIcon = () => (
+const FogIcon = (): JSX.Element => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"

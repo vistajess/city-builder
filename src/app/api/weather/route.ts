@@ -4,7 +4,7 @@ import { OPEN_WEATHER_API_URL } from "@/src/constants/weather";
 // for testing purposes
 const DUMMY_OPENWEATHER_API_KEY = '97f0e02d9fe5cd86ffcb6813fba49d62';
 
-export async function GET(req: Request, res: Response) {
+export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
   const lat = searchParams.get("lat");

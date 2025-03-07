@@ -1,38 +1,39 @@
+import { COLORS } from "@/src/constants/color";
+import { AVAILABLE_LOCATIONS } from "@/src/constants/location";
+import { useHouseContext } from "@/src/contexts/house-context";
+import { generateUUID } from "@/src/lib/id-generator";
+import { HouseFormData, HouseFormErrors } from "@/src/types/house";
 import { forwardRef, useImperativeHandle, useState } from "react";
+import { BlockPicker } from "react-color";
+import { toast } from "sonner";
 import { useModal } from "../../hooks/useModal";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { BaseModal } from "./base-modal";
-import { useHouseContext } from "@/src/contexts/house-context";
-import { generateUUID } from "@/src/lib/id-generator";
-import { HouseFormData, HouseFormErrors } from "@/src/types/house";
-import { Toaster } from "../ui/sonner";
-import { toast } from "sonner";
-import { BlockPicker } from "react-color";
 import styles from "./manage-house-modal.module.css";
 
 export const ManageHouseModal = forwardRef((props, ref) => {
   const { addHouse, savedLocation } = useHouseContext();
   const { isOpen, setIsOpen } = useModal(false);
-  const [color, setColor] = useState<string>("#000000");
+  const [color, setColor] = useState<string>("#f5f5dc");
   const [errors, setErrors] = useState<HouseFormErrors>({});
   const [formData, setFormData] = useState<HouseFormData>({
     name: "",
-    totalFloors: 0,
-    color: "#000000",
+    totalFloors: 1,
+    color: "#f5f5dc",
   });
-  console.log(errors);
+
   useImperativeHandle(ref, () => ({
     openModal() {
       setIsOpen(true);
       setFormData({
         name: "",
-        totalFloors: 0,
-        color: "#000000",
+        totalFloors: 1,
+        color: "#f5f5dc",
       });
       setErrors({});
-      setColor("#000000");
+      setColor("#f5f5dc");
     },
     closeModal() {
       setIsOpen(false);
@@ -58,6 +59,20 @@ export const ManageHouseModal = forwardRef((props, ref) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const buildHouseData = () => {
+    return {
+      id: generateUUID(),
+      name: formData.name,
+      totalFloors: formData.totalFloors,
+      color: formData.color,
+      // pass empty array for now as we will add floors in the context
+      floors: [],
+      location: savedLocation || AVAILABLE_LOCATIONS[0],
+    };
+  };
+
+  // Events
+
   const handleOnchange = (
     event: React.ChangeEvent<HTMLInputElement>,
     fieldName: string
@@ -68,7 +83,7 @@ export const ManageHouseModal = forwardRef((props, ref) => {
     });
   };
 
-  const handleColorChange = (color: any) => {
+  const handleColorChange = (color: { hex: string }) => {
     setColor(color.hex);
     setFormData({
       ...formData,
@@ -76,25 +91,13 @@ export const ManageHouseModal = forwardRef((props, ref) => {
     });
   };
 
-  const handleSaveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSaveClick = () => {
     if (validateForm()) {
       addHouse(buildHouseData());
       toast.success("House added successfully");
       setIsOpen(false);
       console.log("house added", buildHouseData());
     }
-  };
-
-  const buildHouseData = () => {
-    return {
-      id: generateUUID(),
-      name: formData.name,
-      totalFloors: formData.totalFloors,
-      color: formData.color,
-      // pass empty array for now as we will add floors in the context
-      floors: [],
-      location: savedLocation as any,
-    };
   };
 
   const footerChildren = (
@@ -116,7 +119,7 @@ export const ManageHouseModal = forwardRef((props, ref) => {
         footerChildren={footerChildren}
       >
         <div className="grid gap-4 py-4">
-          <form onSubmit={(e) => handleSaveClick(e)}>
+          <form>
             <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="name">Name</Label>
@@ -136,6 +139,7 @@ export const ManageHouseModal = forwardRef((props, ref) => {
                   type="number"
                   max="400"
                   placeholder="Number of floors"
+                  defaultValue={formData.totalFloors}
                   onChange={(e) => handleOnchange(e, "totalFloors")}
                 />
                 {errors.totalFloors && (
@@ -144,33 +148,8 @@ export const ManageHouseModal = forwardRef((props, ref) => {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="color">Color</Label>
-                {/* <Input id="color" placeholder="Color" onChange={(e) => handleOnchange(e, "color")} /> */}
-
                 <BlockPicker
-                  colors={[
-                    "#D9E3F0",
-                    "#F47373",
-                    "#4169E1",
-                    "#697689",
-                    "#37D67A",
-                    "#2CCCE4",
-                    "#555555",
-                    "#DCE775",
-                    "#FF8A65",
-                    "#BA68C8",
-                    "#D6D6D6",
-                    "#C2B280",
-                    "#F5F5DC",
-                    "#89CFF0",
-                    "#D3D3D3",
-                    "#FF6961",
-                    "#800000",
-                    "#FF6347",
-                    "#008080",
-                    "#CC5500",
-                    "#967BB6",
-                    "#708238"
-                  ]}
+                  colors={COLORS}
                   color={color}
                   onChangeComplete={handleColorChange}
                   className={`w-full ${styles["color-picker"]}`}
@@ -183,7 +162,8 @@ export const ManageHouseModal = forwardRef((props, ref) => {
           </form>
         </div>
       </BaseModal>
-      <Toaster />
     </>
   );
 });
+
+ManageHouseModal.displayName = "ManageHouseModal";

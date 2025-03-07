@@ -1,7 +1,19 @@
 .sky {
   background: linear-gradient(to bottom, #a3d5ff, #dff3ff);
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  overflow: hidden;
 }
 
 .ground {
   background: linear-gradient(to bottom, #3a7d44, #5aa469);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 150px;
+  background-color: #5aa469;
 }

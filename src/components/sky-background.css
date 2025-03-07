@@ -1,0 +1,88 @@
+.bg-clear-day {
+  background: linear-gradient(to bottom, #60a5fa, #bfdbfe); /* from-blue-400 to-blue-200 */
+  transition: all 1s ease-in-out;
+}
+
+.bg-clear-night {
+  background: linear-gradient(to bottom, #111827, #000000); /* from-gray-900 to-black */
+  transition: all 1s ease-in-out;
+}
+
+.bg-cloudy {
+  background: linear-gradient(to bottom, #9ca3af, #d1d5db); /* from-gray-400 to-gray-200 */
+  transition: all 1s ease-in-out;
+}
+
+.bg-rainy {
+  background: linear-gradient(to bottom, #2563eb, #6b7280); /* from-blue-600 to-gray-500 */
+  transition: all 1s ease-in-out;
+}
+
+.bg-snowy {
+  background: linear-gradient(to bottom, #d1d5db, #ffffff); /* from-gray-300 to-white */
+  transition: all 1s ease-in-out;
+}
+
+.bg-stormy {
+  background: linear-gradient(to bottom, #374151, #1f2937); /* from-gray-700 to-gray-900 */
+  transition: all 1s ease-in-out;
+}
+
+.bg-foggy {
+  background: linear-gradient(to bottom, #6b7280, #d1d5db); /* from-gray-500 to-gray-300 */
+  transition: all 1s ease-in-out;
+}
+
+
+.bg-sunny {
+  background: linear-gradient(to bottom, #ffdb70, #fff4c2); /* Softer, pastel-like sunny yellow */
+  transition: all 1s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Sun */
+.sun {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, #ffd700, #ffbb33);
+  border-radius: 50%;
+  box-shadow: 0 0 50px rgba(255, 200, 50, 0.8);
+  transform: translateX(-50%);
+  animation: sun-glow 4s infinite alternate ease-in-out;
+}
+
+/* Sun Rays */
+.sun-rays {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 10%, rgba(255, 215, 0, 0) 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: sun-rays-rotate 8s infinite linear;
+}
+
+@keyframes sun-glow {
+  from {
+    box-shadow: 0 0 50px rgba(255, 200, 50, 0.6);
+  }
+  to {
+    box-shadow: 0 0 90px rgba(255, 200, 50, 1);
+  }
+}
+
+@keyframes sun-rays-rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+

@@ -1,18 +1,20 @@
 "use client";
+import { useFilteredHouses } from "@/src/hooks/useFilteredHouses";
+import { ModalRef } from "@/src/types/modal";
 import { useRef, useState } from "react";
 import { useHouseContext } from "../../contexts/house-context";
+import LocationPickerModal from "../modals/location-picker-modal";
 import { ManageHouseModal } from "../modals/manage-house-modal";
 import { HouseDetails } from "./house-details";
 import { LocationWeatherDetails } from "./location-weather-details";
 import { ShowHide } from "./show-hide";
-import LocationPickerModal from "../modals/location-picker-modal";
-import { ModalRef } from "@/src/types/modal";
 
 const Overview = () => {
-  const { savedLocation, houses } = useHouseContext();
+  const { savedLocation } = useHouseContext();
   const [isOverviewVisible, setIsOverviewVisible] = useState(true);
   const LocationPickerModalRef = useRef<ModalRef>(null);
   const manageHouseModalRef = useRef<ModalRef>(null);
+  const { filteredHouses } = useFilteredHouses();
 
   const openManageHouseModal = () => {
     manageHouseModalRef.current?.openModal();
@@ -26,8 +28,7 @@ const Overview = () => {
     setIsOverviewVisible(!isOverviewVisible);
   };
 
-
-  const totalFloors = Array.from(houses.values()).reduce(
+  const totalFloors = Array.from(filteredHouses.values()).reduce(
     (acc, house) => acc + (house.floors?.length || 0),
     0
   );
@@ -54,7 +55,7 @@ const Overview = () => {
         >
           <LocationWeatherDetails savedLocation={savedLocation} />
           <HouseDetails
-            houses={houses}
+            houses={filteredHouses}
             savedLocation={savedLocation}
             totalFloors={totalFloors}
             openManageHouseModal={openManageHouseModal}
