@@ -15,10 +15,11 @@ import { useModal } from "../../hooks/useModal";
 import { useWeatherQuery } from "../../hooks/useWeatherQuery";
 import { Location } from "../../types/location";
 import { Weather } from "../../types/weather";
-import { BaseModal } from "./base-modal";
 import { Loader } from "../loader/loader";
 import { Button } from "../ui/button";
 import { WeatherCard } from "../weather-card";
+import { BaseModal } from "./base-modal";
+import { LocationPickerItem } from "./location-picker-item";
 
 const LocationPickerModal = forwardRef((props, ref) => {
   const { savedLocation, setSavedLocation } = useHouseContext();
@@ -28,6 +29,7 @@ const LocationPickerModal = forwardRef((props, ref) => {
   const { isOpen, setIsOpen } = useModal(true);
   const [weatherData, setWeatherData] = useState<Weather | null>(null);
   const { data, isLoading, isError, error } = useWeatherQuery(currentLocation);
+
 
   useImperativeHandle(ref, () => ({
     openModal() {
@@ -58,15 +60,15 @@ const LocationPickerModal = forwardRef((props, ref) => {
   };
 
   const handleSelectLocation = (locationId: string) => {
-    setCurrentLocation((prevcurrentLocation) => {
-      return AVAILABLE_LOCATIONS.find((location) => location.id === locationId);
+    setCurrentLocation(() => {
+      return AVAILABLE_LOCATIONS.find((location) => location.id === locationId) || AVAILABLE_LOCATIONS[0];
     });
   };
 
   return (
     <BaseModal
       isOpen={isOpen}
-      setIsOpen={setIsOpen}
+      setIsOpen={savedLocation ? setIsOpen : () => {}}
       description="Choose a location where you want to build your city."
       title="Choose Desired Location"
       footerChildren={
@@ -88,7 +90,7 @@ const LocationPickerModal = forwardRef((props, ref) => {
               <SelectLabel>Available Locations</SelectLabel>
               {AVAILABLE_LOCATIONS.map((location) => (
                 <SelectItem key={location.id} value={location.id}>
-                  {location.name}
+                  <LocationPickerItem locationId={location.id} locationName={location.name} />
                 </SelectItem>
               ))}
             </SelectGroup>
@@ -111,5 +113,7 @@ const LocationPickerModal = forwardRef((props, ref) => {
     </BaseModal>
   );
 });
+
+LocationPickerModal.displayName = "LocationPickerModal";
 
 export default LocationPickerModal;

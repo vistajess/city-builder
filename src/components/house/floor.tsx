@@ -1,5 +1,6 @@
 import { Floor as FloorType } from "@/src/types/floor";
 import styles from "./house.module.css";
+import { FC } from "react";
 
 export const Floor = ({ floor }: { floor: FloorType }) => {
   return (
@@ -13,22 +14,27 @@ export const Floor = ({ floor }: { floor: FloorType }) => {
   );
 };
 
-Floor.Normal = ({ floor }: { floor: FloorType }) => {
+Floor.Normal = (({ floor }: { floor: FloorType }) => {
   return (
     <div className={`${styles.floor}`} style={{ backgroundColor: floor.color }}>
-      <div>{floor.level}</div>
+      {/* <div>{floor.level}</div> */}
       <div className={`${styles.window} ${styles.one}`}></div>
       <div className={`${styles.window} ${styles.two}`}></div>
     </div>
   );
-};
+}) as FC<{ floor: FloorType }>;
 
-Floor.WithDoor = ({ floor }: { floor: FloorType }) => {
+Floor.Normal.displayName = "Floor.Normal";
+
+
+Floor.WithDoor = (({ floor }: { floor: FloorType }) => {
   return (
     <div className={`${styles.floor}`} style={{ backgroundColor: floor.color }}>
-      <div>{floor.level}</div>
+      {/* <div>{floor.level}</div> */}
       <div className={`${styles.window} ${styles.one}`}></div>
       <div className={styles.door}></div>
     </div>
   );
-};
+}) as FC<{ floor: FloorType }>;
+
+Floor.WithDoor.displayName = "Floor.WithDoor"; 

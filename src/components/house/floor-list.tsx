@@ -1,15 +1,14 @@
-import { FixedSizeList as List, ListChildComponentProps } from "react-window";
-import { Floor as FloorType } from "@/src/types/floor";
-import styles from "./house.module.css";
-import { Floor } from "./floor";
-import {
-  WrenchScrewdriverIcon,
-  TrashIcon,
-  CubeTransparentIcon,
-} from "@heroicons/react/24/outline";
 import { useHouseContext } from "@/src/contexts/house-context";
-import { Button } from "../ui/button";
+import { Floor as FloorType } from "@/src/types/floor";
+import {
+  CubeTransparentIcon,
+  TrashIcon,
+  WrenchScrewdriverIcon,
+} from "@heroicons/react/24/outline";
 import { Label } from "@radix-ui/react-label";
+import { FixedSizeList as List, ListChildComponentProps } from "react-window";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   Tooltip,
@@ -17,7 +16,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { Toaster, toast } from "sonner";
+import { Floor } from "./floor";
+import styles from "./house.module.css";
+import { FC } from "react";
 
 export const FloorList = ({
   floors,
@@ -39,10 +40,6 @@ export const FloorList = ({
   const handleSelectHouse = () => {
     console.log("select house");
     setSelectedHouse(houseId);
-  };
-
-  const handleDeleteHouse = () => {
-    console.log("delete house");
   };
 
   return (
@@ -80,8 +77,8 @@ export const FloorList = ({
   );
 };
 
-FloorList.RoofPopover = () => {
-  const { deleteHouse, selectedHouse } = useHouseContext();
+FloorList.RoofPopover = (() => {
+  const { deleteHouse, selectedHouse, cloneHouse } = useHouseContext();
 
   const handleDeleteHouse = () => {
     if (selectedHouse) {
@@ -90,9 +87,15 @@ FloorList.RoofPopover = () => {
     }
   };
 
+  const handleCloneHouse = () => {
+    if (selectedHouse) {
+      cloneHouse(selectedHouse.id);
+      toast.success("House cloned successfully");
+    }
+  };
+
   return (
     <>
-      <Toaster />
       <div className="grid gap-4">
         <div className="space-y-2">
           <h4 className="font-medium leading-none">House Details</h4>
@@ -133,7 +136,7 @@ FloorList.RoofPopover = () => {
                     size="sm"
                     variant="outline"
                     className="flex items-center gap-1 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 transition-all"
-                    // onClick={openManageHouseModal}
+                    onClick={handleCloneHouse}
                   >
                     <CubeTransparentIcon className="w-4 h-4" />
                   </Button>
@@ -164,4 +167,7 @@ FloorList.RoofPopover = () => {
       </div>
     </>
   );
-};
+}) as FC;
+
+FloorList.RoofPopover.displayName = "FloorList.RoofPopover";
+
