@@ -24,7 +24,7 @@ export const HouseDetails = ({
   openLocationPickerModal,
 }: HouseDetailsProps) => {
   return (
-    <div className="bg-white p-4 rounded-b-lg shadow-lg w-[350px] border-blue-300/20">
+    <div className="bg-white p-4 rounded-b-lg shadow-lg w-[370px] border-blue-300/20">
       <TooltipProvider>
         <div className="flex flex-row gap-1 justify-between">
           <Tooltip>

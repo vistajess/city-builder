@@ -6,18 +6,19 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 
-import { useHouseContext } from "@/src/contexts/house-context";
+import { useHouseActions } from "@/src/contexts/house-actions.context";
+import { useHouseData } from "@/src/contexts/house-data.context";
 import { ModalRef } from "@/src/types/modal";
+import { CubeTransparentIcon, TrashIcon, WrenchScrewdriverIcon } from "@heroicons/react/24/outline";
 import { useRef } from "react";
 import { toast } from "sonner";
 import { ManageHouseModal } from "../modals/manage-house-modal";
-import { Label } from "../ui/label";
 import { Button } from "../ui/button";
-import { CubeTransparentIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { WrenchScrewdriverIcon } from "@heroicons/react/24/outline";
+import { Label } from "../ui/label";
 
 export const RoofPopover = (() => {
-  const { deleteHouse, selectedHouse, cloneHouse } = useHouseContext();
+  const { deleteHouse, cloneHouse } = useHouseActions();
+  const { selectedHouse } = useHouseData();
   const manageHouseModalRef = useRef<ModalRef>(null);
 
   const handleDeleteHouse = () => {

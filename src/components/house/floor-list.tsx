@@ -1,4 +1,5 @@
-import { useHouseContext } from "@/src/contexts/house-context";
+import { useHouseActions } from "@/src/contexts/house-actions.context";
+import { useHouseData } from "@/src/contexts/house-data.context";
 import { Floor as FloorType } from "@/src/types/floor";
 import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -15,9 +16,12 @@ export const FloorList = ({
   floors,
   houseId,
 }: FloorListProps) => {
-  const { selectedHouse, setSelectedHouse } = useHouseContext();
+  const { selectedHouse } = useHouseData();
+  const { setSelectedHouse } = useHouseActions();
 
   const MAX_VISIBLE_FLOORS = 5;
+  const ITEM_SIZE = 80;
+  const WINDOW_HEIGHT = Math.min(500, floors.length * ITEM_SIZE);
 
   const Row = ({ index, style }: ListChildComponentProps) => (
     <div style={style}>
@@ -57,14 +61,15 @@ export const FloorList = ({
         </PopoverContent>
       </Popover>
       <List
-        height={500} // Visible height
+        height={WINDOW_HEIGHT} // Visible height
         width={200} // Full width
         itemCount={floors.length} // Total number of floors
-        itemSize={80} // Height per row (px)
+        itemSize={ITEM_SIZE} // Height per row (px)
+        overscanCount={2}
         className={
           selectedHouse?.id === houseId
-            ? `${styles["floor-list-wrapper"]} ${styles["selected-house"]}`
-            : `${styles["floor-list-wrapper"]}`
+            ? `${styles["selected-house"]}`
+            : ``
         }
       >
         {Row}

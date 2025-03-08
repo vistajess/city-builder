@@ -1,8 +1,14 @@
 import { useFilteredHouses } from "@/src/hooks/useFilteredHouses";
+import { Location } from "@/src/types/location";
 
-export const LocationPickerItem = ({ locationId, locationName }: { locationId: string, locationName: string }) => {
+export const LocationPickerItem = ({ location }: { location: Location }) => {
+  const { filteredHouses } = useFilteredHouses(location.id);
 
-  const { filteredHouses } = useFilteredHouses(locationId);
-  
-  return <div>{`${locationName} (${filteredHouses.size} houses)`}</div>;
+  return (
+    <div>
+      <span className={filteredHouses.size > 0 ? "font-bold" : "font-normal"}>
+        {location.name}, {location.country} {`(${filteredHouses.size} houses)`}
+      </span>
+    </div>
+  );
 };

@@ -1,14 +1,8 @@
 .house-container {
-  /* position: absolute;
-  bottom: 0; */
   position: relative;
   position: relative;
   display: flex;
   align-items: end;
-}
-
-.selected-house > div {
-  /* border: 2px solid black; */
 }
 
 /* Roof */
@@ -32,7 +26,6 @@
   position: absolute;
   right: 20px;
   bottom: 0;
-
   background: #b22222;
   border: 2px solid #8b0000;
 }

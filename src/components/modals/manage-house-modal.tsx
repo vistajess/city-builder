@@ -1,6 +1,7 @@
 import { COLORS } from "@/src/constants/color";
 import { AVAILABLE_LOCATIONS } from "@/src/constants/location";
-import { useHouseContext } from "@/src/contexts/house-context";
+import { useHouseActions } from "@/src/contexts/house-actions.context";
+import { useHouseData } from "@/src/contexts/house-data.context";
 import { generateUUID } from "@/src/lib/id-generator";
 import { House, HouseFormData, HouseFormErrors } from "@/src/types/house";
 import { forwardRef, useImperativeHandle, useState } from "react";
@@ -20,7 +21,8 @@ const initialFormData: HouseFormData = {
 };
 
 export const ManageHouseModal = forwardRef((props, ref) => {
-  const { addHouse, savedLocation, selectedHouse, updateHouse, setSelectedHouse } = useHouseContext();
+  const { addHouse,updateHouse, setSelectedHouse } = useHouseActions();
+  const { savedLocation, selectedHouse} = useHouseData();
   const { isOpen, setIsOpen } = useModal(false);
   const [colorPickerValue, setColorPickerValue] = useState<string>(initialFormData.color);
   const [errors, setErrors] = useState<HouseFormErrors>({});

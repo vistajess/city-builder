@@ -37,6 +37,9 @@ export const LocationWeatherDetails = ({
             </TooltipProvider>
           </div>
           <div className="font-medium capitalize">
+            {savedLocation.country}
+          </div>
+          <div className="font-medium capitalize">
             {savedLocation.weather?.description || "No weather data"}
           </div>
           <div className="font-sm capitalize mt-1 flex items-center gap-2">
