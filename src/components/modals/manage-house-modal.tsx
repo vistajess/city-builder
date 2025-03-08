@@ -81,7 +81,7 @@ export const ManageHouseModal = forwardRef((props, ref) => {
       totalFloors: formData.totalFloors,
       color: formData.color,
       // pass empty array for now as we will add floors in the context
-      floors: [],
+      floors: selectedHouse?.floors,
       location: selectedHouse?.location,
     };
   };
