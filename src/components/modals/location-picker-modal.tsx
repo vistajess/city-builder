@@ -8,9 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select";
+import { useHouseActions } from "@/src/contexts/house-actions.context";
+import { useHouseData } from "@/src/contexts/house-data.context";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { AVAILABLE_LOCATIONS } from "../../constants/location";
-import { useHouseContext } from "../../contexts/house-context";
 import { useModal } from "../../hooks/useModal";
 import { useWeatherQuery } from "../../hooks/useWeatherQuery";
 import { Location } from "../../types/location";
@@ -22,7 +23,8 @@ import { BaseModal } from "./base-modal";
 import { LocationPickerItem } from "./location-picker-item";
 
 const LocationPickerModal = forwardRef((props, ref) => {
-  const { savedLocation, setSavedLocation } = useHouseContext();
+  const { setSavedLocation } = useHouseActions();
+  const { savedLocation } = useHouseData();
   const [currentLocation, setCurrentLocation] = useState<Location>(
     AVAILABLE_LOCATIONS[0]
   );
@@ -93,7 +95,7 @@ const LocationPickerModal = forwardRef((props, ref) => {
               <SelectLabel>Available Locations</SelectLabel>
               {AVAILABLE_LOCATIONS.map((location) => (
                 <SelectItem key={location.id} value={location.id}>
-                  <LocationPickerItem locationId={location.id} locationName={location.name} />
+                  <LocationPickerItem location={location} />
                 </SelectItem>
               ))}
             </SelectGroup>

@@ -2,15 +2,16 @@
 import { useCallback, useMemo, useRef } from "react";
 import { Cloud } from "../components/cloud";
 import { HouseList } from "../components/house/house-list";
-import Overview from "../components/overview/overview";
-import styles from "./page.module.css";
-import { Toaster } from "../components/ui/sonner";
-import { SkyBackground } from "../components/sky-background";
-import { useHouseContext } from "../contexts/house-context";
 import { ManageHouseModal } from "../components/modals/manage-house-modal";
+import Overview from "../components/overview/overview";
+import { SkyBackground } from "../components/sky-background";
+import { Toaster } from "../components/ui/sonner";
+import { useHouseData } from "../contexts/house-data.context";
 import { ModalRef } from "../types/modal";
+import styles from "./page.module.css";
+
 export default function Home() {
-  const { savedLocation } = useHouseContext();
+  const { savedLocation } = useHouseData();
   const manageHouseModalRef = useRef<ModalRef>(null);
 
   const handleOpenManageHouseModal = useCallback(() => {

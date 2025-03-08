@@ -1,36 +1,24 @@
 "use client";
 
-import { createContext, useCallback, useContext, useState } from "react";
+import {
+  useCallback,
+  useMemo,
+  useState
+} from "react";
 import { generateUUID } from "../lib/id-generator";
 import { House } from "../types/house";
 import { Location } from "../types/location";
-interface HouseContextType {
-  savedLocation: Location | null;
-  setSavedLocation: (location: Location) => void;
-  houses: Map<string, House>;
-  getHousesByLocation: (locationId: string) => Map<string, House>;
-  addHouse: (house: House) => void;
-  cloneHouse: (id: string) => void;
-  updateHouse: (house: House) => void;
-  deleteHouse: (id: string) => void;
-  selectedHouse: House | null;
-  setSelectedHouse: (id: string | null) => void;
-}
+import { HouseActions, HouseActionsContext, useHouseActions } from "./house-actions.context";
+import { HouseData, HouseDataContext, useHouseData } from "./house-data.context";
 
-export const HouseContext = createContext<HouseContextType>({
-  savedLocation: null,
-  setSavedLocation: () => {},
-  houses: new Map<string, House>(),
-  getHousesByLocation: () => new Map<string, House>(),
-  addHouse: () => {},
-  cloneHouse: () => {},
-  updateHouse: () => {},
-  deleteHouse: () => {},
-  selectedHouse: null,
-  setSelectedHouse: () => {}
-});
+export const useHouseContext = () => {
+  return {
+    ...useHouseData(),
+    ...useHouseActions(),
+  };
+};
 
-export type HousesContextProviderProps = {
+type HousesContextProviderProps = {
   children: React.ReactNode;
 };
 
@@ -41,11 +29,11 @@ export const HouseContextProvider = ({
   const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
   const [savedLocation, setSavedLocation] = useState<Location | null>(null);
 
-  const handleSavedLocation = (location: Location) => {
+  const handleSavedLocation = useCallback((location: Location) => {
     setSavedLocation(location);
-  };
+  }, [setSavedLocation]);
 
-  const handleSelectHouse = (houseId: string | null) => {
+  const handleSelectHouse = useCallback((houseId: string | null) => {
     if (houseId === null) {
       setSelectedHouse(null);
       return;
@@ -56,15 +44,18 @@ export const HouseContextProvider = ({
     if (house) {
       setSelectedHouse(house);
     }
-  };
-
-  const getHousesByLocation = useCallback((locationId: string) => {
-    return new Map(
-      [...houses].filter(([, house]) => house.location.id === locationId)
-    );
   }, [houses]);
 
-  const addHouse = (house: House, isClone: boolean = false) => {
+  const getHousesByLocation = useCallback(
+    (locationId: string) => {
+      return new Map(
+        [...houses].filter(([, house]) => house.location.id === locationId)
+      );
+    },
+    [houses]
+  );
+
+  const addHouse = useCallback((house: House, isClone: boolean = false) => {
     const houseId = isClone ? generateUUID() : house.id;
     const houseName = isClone ? `${house.name} (Copy)` : house.name;
 
@@ -80,22 +71,22 @@ export const HouseContextProvider = ({
               level: index + 1,
               floorId: generateUUID(),
               color: house.color,
-            }))
+            })),
           },
         ],
       ]);
     });
-  };
+  }, [houses]);
 
-  const cloneHouse = (id: string) => {
+  const cloneHouse = useCallback((id: string) => {
     const house = houses.get(id);
 
     if (house) {
       addHouse(house, true);
     }
-  };
+  }, [houses, addHouse]);
 
-  const updateHouse = (house: House) => {
+  const updateHouse = useCallback((house: House) => {
     setHouses((prevHouses) => {
       return new Map([
         ...prevHouses,
@@ -107,46 +98,56 @@ export const HouseContextProvider = ({
               level: index + 1,
               floorId: generateUUID(),
               color: house.color,
-            }))
-          }
-        ]
+            })),
+          },
+        ],
       ]);
     });
-    // setHouses(houses.map((h) => (h.id === house.id ? house : h)));
-  };
+  }, [houses]);
 
-  const deleteHouse = (id: string) => {
-    setHouses((prevHouses) => {
-      const newHouses = new Map(prevHouses);
+  const deleteHouse = useCallback((id: string) => {
+    setHouses((prevHouse) => {
+      const newHouses = new Map(prevHouse);
       newHouses.delete(id);
       return newHouses;
     });
-  };
+  }, [houses]);
 
-  const contextvalue: HouseContextType = {
-    savedLocation,
-    setSavedLocation: handleSavedLocation,
-    houses,
-    getHousesByLocation,
-    addHouse,
-    cloneHouse,
-    updateHouse,
-    deleteHouse,
-    selectedHouse,
-    setSelectedHouse: handleSelectHouse
-  };
+  const data: HouseData = useMemo(
+    () => ({
+      houses,
+      selectedHouse,
+      savedLocation,
+    }),
+    [houses, selectedHouse, savedLocation]
+  );
+
+  const actions: HouseActions = useMemo(
+    () => ({
+      addHouse,
+      cloneHouse,
+      updateHouse,
+      deleteHouse,
+      setSelectedHouse: handleSelectHouse,
+      setSavedLocation: handleSavedLocation,
+      getHousesByLocation,
+    }),
+    [
+      addHouse,
+      cloneHouse,
+      updateHouse,
+      deleteHouse,
+      handleSelectHouse,
+      handleSavedLocation,
+      getHousesByLocation
+    ]
+  );
 
   return (
-    <HouseContext.Provider value={contextvalue}>
-      {children}
-    </HouseContext.Provider>
+    <HouseDataContext.Provider value={data}>
+      <HouseActionsContext.Provider value={actions}>
+        {children}
+      </HouseActionsContext.Provider>
+    </HouseDataContext.Provider>
   );
-};
-
-export const useHouseContext = () => {
-  const context = useContext(HouseContext);
-  if (context === undefined) {
-    throw new Error("useHouseContext must be used within a HouseProvider");
-  }
-  return context;
 };

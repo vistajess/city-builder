@@ -1,20 +1,17 @@
-import { useHouseContext } from "@/src/contexts/house-context";
-import { House as HouseType } from "@/src/types/house";
-import { useEffect, useState } from "react";
+import { useHouseData } from "@/src/contexts/house-data.context";
+import { useHouseActions } from "@/src/contexts/house-actions.context";
+import { useMemo } from "react";
 
 export const useFilteredHouses = (locationId?: string) => {
-  const { houses, getHousesByLocation, savedLocation } = useHouseContext();
+  const { houses, savedLocation } = useHouseData();
+  const { getHousesByLocation } = useHouseActions();
 
-  const [filteredHouses, setFilteredHouses] = useState(new Map<string, HouseType>());
+  const activeLocationId = locationId || savedLocation?.id;
 
-
-  useEffect(() => {
-    const activeLocationId = locationId || savedLocation?.id;
-    if (activeLocationId) {
-      const filteredHouses = getHousesByLocation(activeLocationId);
-      setFilteredHouses(filteredHouses);
-    }
-  }, [savedLocation, houses, locationId, getHousesByLocation]);
+  const filteredHouses = useMemo(() => {
+    if (!activeLocationId) return new Map();
+    return getHousesByLocation(activeLocationId);
+  }, [activeLocationId, getHousesByLocation, houses]);
 
   return { filteredHouses };
-}
+};
