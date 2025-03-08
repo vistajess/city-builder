@@ -4,22 +4,22 @@ import { useFilteredHouses } from "@/src/hooks/useFilteredHouses";
 import { ModalRef } from "@/src/types/modal";
 import { useCallback, useMemo, useRef, useState } from "react";
 import LocationPickerModal from "../modals/location-picker-modal";
+import { ManageHouseModal } from "../modals/manage-house-modal";
 import { HouseDetails } from "./house-details";
 import { LocationWeatherDetails } from "./location-weather-details";
 import { ShowHide } from "./show-hide";
-const Overview = ({
-  openManageHouseModal,
-}: {
-  openManageHouseModal: () => void;
-}) => {
+
+const Overview = () => {
   const { savedLocation } = useHouseData();
   const [isOverviewVisible, setIsOverviewVisible] = useState(true);
   const locationPickerModalRef = useRef<ModalRef>(null);
   const { filteredHouses } = useFilteredHouses();
 
+  const manageHouseModalRef = useRef<ModalRef>(null);
+
   const handleOpenManageHouseModal = useCallback(() => {
-    openManageHouseModal();
-  }, [openManageHouseModal]);
+    manageHouseModalRef.current?.openModal();
+  }, []);
 
   const handleOpenLocationPickerModal = useCallback(() => {
     locationPickerModalRef.current?.openModal();
@@ -39,7 +39,7 @@ const Overview = ({
   return (
     <>
       <LocationPickerModal ref={locationPickerModalRef} />
-
+      <ManageHouseModal ref={manageHouseModalRef} />
       {savedLocation && (
         <div className={`absolute top-5 right-5 z-10`}>
           <div className="absolute top-0 right-0 w-10 h-10 flex items-center justify-center z-10">

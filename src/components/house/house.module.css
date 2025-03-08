@@ -53,7 +53,7 @@
 
 /* Floor */
 .floor-list-wrapper {
-
+  border: 2px solid transparent;
 }
 
 .floor {
@@ -62,9 +62,23 @@
   background-color: #F2E9E4;
   position: relative;
   border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  
 }
 
 .floor:hover {
-  border: 2px solid black;
-  cursor: pointer;
+  animation: pop-in 0.3s ease-in-out 0.1s forwards;
 }
+
+@keyframes pop-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0.3;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+

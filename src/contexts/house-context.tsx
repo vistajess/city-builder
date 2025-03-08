@@ -16,7 +16,7 @@ import {
 } from "./house-data.context";
 import { LOCAL_STORAGE_KEYS } from "../constants/local-storage";
 import { useDebounce } from "use-debounce";
-
+import { Floor } from "../types/floor";
 export const useHouseContext = () => {
   return {
     ...useHouseData(),
@@ -32,7 +32,9 @@ export const HouseContextProvider = ({
   children,
 }: HousesContextProviderProps) => {
   const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
+  // const [selectedFloor, setSelectedFloor] = useState<Floor | null>(null);
   const [savedLocation, setSavedLocation] = useState<Location | null>(null);
+  const [selectedFloor, setSelectedFloor] = useState<Floor | null>(null);
   const [houses, setHouses] = useState<Map<string, House>>(() => {
     if (typeof window === "undefined") return new Map();
     try {
@@ -160,16 +162,32 @@ export const HouseContextProvider = ({
       level: index + 1,
       floorId: generateUUID(),
       color: house.color,
+      houseId: house.id,
+      houseName: house.name,
     }));
   };
+
+  const updateFloor = useCallback(
+    (floor: Floor) => {
+      const findHouse = houses.get(floor.houseId);
+      if (findHouse) {
+        setHouses((prevHouses) => {
+          return new Map([...prevHouses, [floor.houseId, { ...findHouse, floors: findHouse.floors.map((f) => f.floorId === floor.floorId ? floor : f) }]]
+          );
+        });
+      }
+    },
+    [houses]
+  );
 
   const data: HouseData = useMemo(
     () => ({
       houses,
       selectedHouse,
       savedLocation,
+      selectedFloor,
     }),
-    [houses, selectedHouse, savedLocation]
+    [houses, selectedHouse, savedLocation, selectedFloor]
   );
 
   const actions: HouseActions = useMemo(
@@ -181,6 +199,8 @@ export const HouseContextProvider = ({
       setSelectedHouse: handleSelectHouse,
       setSavedLocation: handleSavedLocation,
       getHousesByLocation,
+      setSelectedFloor,
+      updateFloor,
     }),
     [
       addHouse,
@@ -190,6 +210,8 @@ export const HouseContextProvider = ({
       handleSelectHouse,
       handleSavedLocation,
       getHousesByLocation,
+      setSelectedFloor,
+      updateFloor,
     ]
   );
 
