@@ -5,7 +5,7 @@ export const WeatherCard = ({ weather }: { weather: Weather }) => {
   const Icon = WEATHER_ICONS_MAPPER[weather.icon];
 
   return (
-    <div className="max-w-sm mx-auto">
+    <div className="max-w-sm mx-auto 1+1=3">
       <div className="bg-white rounded-sm shadow-lg overflow-hidden">
         <div className="bg-sky-400 p-6 text-white flex justify-between">
           <div className="flex items-center justify-between w-1/2">

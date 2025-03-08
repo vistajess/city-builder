@@ -1,18 +1,20 @@
 import { motion } from "framer-motion";
 
+type CloudProps = {
+  size: number;
+  top: string;
+  duration: number;
+  opacity: number;
+  direction: string;
+};
+
 export const Cloud = ({
   size,
   top,
   duration,
   opacity,
   direction,
-}: {
-  size: number;
-  top: string;
-  duration: number;
-  opacity: number;
-  direction: string;
-}) => {
+}: CloudProps) => {
   const isLeftToRight = direction === "left";
 
   return (

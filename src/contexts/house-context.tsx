@@ -56,7 +56,7 @@ export const HouseContextProvider = ({
   );
 
   const addHouse = useCallback((house: House, isClone: boolean = false) => {
-    const houseId = isClone ? generateUUID() : house.id;
+    const houseId = isClone ?  generateUUID() : house.id;
     const houseName = isClone ? `${house.name} (Copy)` : house.name;
 
     setHouses((prevHouses) => {
@@ -66,6 +66,7 @@ export const HouseContextProvider = ({
           houseId,
           {
             ...house,
+            id: houseId,
             name: houseName,
             floors: Array.from({ length: house.totalFloors }, (_, index) => ({
               level: index + 1,
