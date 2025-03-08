@@ -100,11 +100,7 @@ export const HouseContextProvider = ({
               ...house,
               id: houseId,
               name: houseName,
-              floors: Array.from({ length: house.totalFloors }, (_, index) => ({
-                level: index + 1,
-                floorId: generateUUID(),
-                color: house.color,
-              })),
+              floors: generateFloors(house)
             },
           ],
         ]);
@@ -126,22 +122,24 @@ export const HouseContextProvider = ({
 
   const updateHouse = useCallback(
     (house: House) => {
-      setHouses((prevHouses) => {
-        return new Map([
-          ...prevHouses,
-          [
-            house.id,
-            {
-              ...house,
-              floors: Array.from({ length: house.totalFloors }, (_, index) => ({
-                level: index + 1,
-                floorId: generateUUID(),
-                color: house.color,
-              })),
-            },
-          ],
-        ]);
-      });
+      const findHouse = houses.get(house.id);
+      // If the house has a different total floors or color, we need to generate new floors
+      const isValidGenerateFloors = (findHouse?.totalFloors !== house.totalFloors || findHouse?.color !== house.color);
+
+      if (findHouse) {
+        setHouses((prevHouses) => {
+          return new Map([
+            ...prevHouses,
+            [
+              house.id,
+              {
+                ...house,
+                floors: isValidGenerateFloors ? generateFloors(house) : house.floors
+              },
+            ],
+          ]);
+        });
+      }
     },
     [houses]
   );
@@ -156,6 +154,14 @@ export const HouseContextProvider = ({
     },
     [houses]
   );
+
+  const generateFloors = (house: House) => {
+    return Array.from({ length: house.totalFloors }, (_, index) => ({
+      level: index + 1,
+      floorId: generateUUID(),
+      color: house.color,
+    }));
+  };
 
   const data: HouseData = useMemo(
     () => ({
