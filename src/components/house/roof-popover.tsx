@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -9,29 +9,42 @@ import {
 import { useHouseActions } from "@/src/contexts/house-actions.context";
 import { useHouseData } from "@/src/contexts/house-data.context";
 import { ModalRef } from "@/src/types/modal";
-import { CubeTransparentIcon, TrashIcon, WrenchScrewdriverIcon } from "@heroicons/react/24/outline";
+import {
+  CubeTransparentIcon,
+  TrashIcon,
+  WrenchScrewdriverIcon,
+} from "@heroicons/react/24/outline";
 import { useRef } from "react";
 import { toast } from "sonner";
 import { ManageHouseModal } from "../modals/manage-house-modal";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
+import { Alert } from "../alert";
 
 export const RoofPopover = (() => {
-  const { deleteHouse, cloneHouse } = useHouseActions();
+  const { deleteHouse, cloneHouse, setSelectedHouse } = useHouseActions();
   const { selectedHouse } = useHouseData();
   const manageHouseModalRef = useRef<ModalRef>(null);
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const handleDeleteHouse = () => {
+    setAlertOpen(true);
+  };
+
+  const handleConfirmDeleteHouse = () => {
     if (selectedHouse) {
       deleteHouse(selectedHouse.id);
       toast.success("House deleted successfully");
+      setSelectedHouse(null);
     }
+    setAlertOpen(false);
   };
 
   const handleCloneHouse = () => {
     if (selectedHouse) {
       cloneHouse(selectedHouse.id);
       toast.success("House cloned successfully");
+      setSelectedHouse(null);
     }
   };
 
@@ -41,6 +54,14 @@ export const RoofPopover = (() => {
 
   return (
     <>
+      <Alert
+        title="Delete House"
+        description={`Are you sure you want to delete this house ${selectedHouse?.name}?`}
+        onConfirm={handleConfirmDeleteHouse}
+        onCancel={() => setAlertOpen(false)}
+        open={alertOpen}
+        setOpen={setAlertOpen}
+      />
       <ManageHouseModal ref={manageHouseModalRef} />
       <div className="grid gap-4">
         <div className="space-y-2">
