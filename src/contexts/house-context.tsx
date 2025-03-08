@@ -170,7 +170,6 @@ export const HouseContextProvider = ({
   const updateFloor = useCallback(
     (floor: Floor) => {
       const findHouse = houses.get(floor.houseId);
-      console.log(floor);
       if (findHouse) {
         setHouses((prevHouses) => {
           return new Map([...prevHouses, [floor.houseId, { ...findHouse, floors: findHouse.floors.map((f) => f.floorId === floor.floorId ? floor : f) }]]
