@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { WEATHER_BG_MAPPER } from "../constants/weather";
+import { WEATHER_BG_MAPPER } from "../../constants/weather";
 import "./sky-background.css";
 
 export const SkyBackground = ({ weatherCode }: { weatherCode: string }) => {
@@ -10,7 +10,7 @@ export const SkyBackground = ({ weatherCode }: { weatherCode: string }) => {
   }, [weatherCode]);
 
   return (
-    <div className={`h-screen w-screen ${bgClass} flex justify-center items-center`}>
+    <div className={`fixed h-screen w-screen ${bgClass} flex justify-center items-center z-0`}>
       {bgClass === "bg-sunny" && (
         <>
           <div className="sun"></div>

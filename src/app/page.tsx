@@ -1,14 +1,19 @@
 "use client";
-import { useEffect, useMemo, useRef } from "react";
-import { Cloud } from "../components/cloud";
+import { lazy, Suspense, useEffect, useMemo, useRef } from "react";
+import { Cloud } from "../components/cloud/cloud";
 import { HouseList } from "../components/house/house-list";
 import Overview from "../components/overview/overview";
-import { SkyBackground } from "../components/sky-background";
+import { SkyBackground } from "../components/sky-background/sky-background";
 import { Toaster } from "../components/ui/sonner";
 import { useHouseData } from "../contexts/house-data.context";
 import styles from "./page.module.css";
-import { ManageFloorModal } from "../components/modals/manage-floor-modal";
 import { ModalRef } from "../types/modal";
+
+const ManageFloorModal = lazy(() => 
+  import("../components/modals/manage-floor-modal").then(mod => ({ 
+    default: mod.ManageFloorModal 
+  }))
+);
 
 export default function Home() {
   const { savedLocation, selectedFloor } = useHouseData();
@@ -22,25 +27,28 @@ export default function Home() {
 
   const clouds = useMemo(
     () => [
-      { size: 150, top: "25%", duration: 22, opacity: 0.7, direction: "left" },
-      { size: 120, top: "45%", duration: 28, opacity: 0.9, direction: "right" },
-      { size: 140, top: "80%", duration: 25, opacity: 0.8, direction: "left" },
-      { size: 170, top: "10%", duration: 30, opacity: 0.8, direction: "left" },
-      { size: 200, top: "65%", duration: 32, opacity: 0.6, direction: "right" },
+      { size: 150, top: "25%", opacity: 0.4 },
+      { size: 120, top: "85%", opacity: 0.7 },
+      { size: 120, top: "70%", opacity: 0.7 },
+      { size: 140, top: "30%", opacity: 0.8 },
+      { size: 170, top: "10%", opacity: 0.8 },
+      { size: 200, top: "65%", opacity: 0.6 },
     ],
     []
   );
   return (
     <>
-      <main>
+      <main className={`${styles.main} bg-blue-950`}>
         {selectedFloor?.floorId && (
-          <ManageFloorModal ref={manageFloorModalRef} />
+          <Suspense fallback={null}>
+            <ManageFloorModal ref={manageFloorModalRef} />
+          </Suspense>
         )}
         <Toaster />
         <Overview />
 
         <SkyBackground weatherCode={savedLocation?.weather?.icon || "01d"} />
-        <div className={`absolute h-[50vh] w-full top-0 overflow-hidden`}>
+        <div className={`fixed h-[65vh] w-full top-0 overflow-hidden`}>
           {clouds.map((cloud, index) => (
             <Cloud key={index} {...cloud} />
           ))}

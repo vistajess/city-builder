@@ -1,8 +1,7 @@
 import { useHouseActions } from "@/src/contexts/house-actions.context";
 import { useHouseData } from "@/src/contexts/house-data.context";
 import { Floor as FloorType } from "@/src/types/floor";
-import { useRef } from "react";
-import { FixedSizeList as List, ListChildComponentProps } from "react-window";
+import { useCallback, useRef } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Floor } from "./floor";
 import styles from "./house.module.css";
@@ -17,22 +16,19 @@ export const FloorList = ({ floors, houseId }: FloorListProps) => {
   const { houses, selectedHouse } = useHouseData();
   const { setSelectedHouse, setSelectedFloor } = useHouseActions();
   const itemRefs = useRef(new Map<HTMLElement, string>());
-
   const MAX_VISIBLE_FLOORS = 5;
-  const ITEM_SIZE = 80;
-  const WINDOW_HEIGHT = Math.min(500, floors.length * ITEM_SIZE);
 
-  const handleSelectHouse = () => {
+  const handleSelectHouse = useCallback(() => {
     setSelectedHouse(houseId);
-  };
+  }, [houseId, setSelectedHouse]);
 
-  const handlePointerDownOutside = () => {
+  const handlePointerDownOutside = useCallback(() => {
     setSelectedHouse(null);
-  };
+  }, [setSelectedHouse]);
 
   // attach event listener to the container
   // execute event delegation to find the floor id
-  const handleFloorClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleFloorClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     let target = event.target as HTMLElement;
     while (target && !itemRefs.current.has(target)) {
       target = target.parentElement as HTMLElement;
@@ -46,21 +42,7 @@ export const FloorList = ({ floors, houseId }: FloorListProps) => {
           ?.floors.find((floor) => floor.floorId === floorId) || null;
       setSelectedFloor(findFloor);
     }
-  };
-
-  const Row = ({ index, style }: ListChildComponentProps) => (
-    <div
-      style={style}
-      className="floor-row"
-      data-floor-id={floors[index].floorId}
-      onClick={handleFloorClick}
-      ref={(el) => {
-        if (el) itemRefs.current.set(el, floors[index].floorId);
-      }}
-    >
-      <Floor floor={floors[index]} />
-    </div>
-  );
+  }, [houses, houseId, setSelectedFloor]);
 
   return (
     <>
@@ -90,19 +72,20 @@ export const FloorList = ({ floors, houseId }: FloorListProps) => {
             <RoofPopover />
           </PopoverContent>
         </Popover>
-        <div className="virtualized-list-container">
-          <List
-            height={WINDOW_HEIGHT} // Visible height
-            width={200} // Full width
-            itemCount={floors.length} // Total number of floors
-            itemSize={ITEM_SIZE} // Height per row (px)
-            overscanCount={2}
-            className={
-              selectedHouse?.id === houseId ? `${styles["selected-house"]}` : ``
-            }
-          >
-            {Row}
-          </List>
+        <div className="floor-list-container">
+          <div onClick={handleFloorClick}>
+            {floors.map((floor) => (
+              <div
+                key={floor.floorId}
+                ref={(el) => {
+                  if (el) itemRefs.current.set(el, floor.floorId);
+                }}
+                className="floor-row"
+              >
+                <Floor key={floor.floorId} floor={floor} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>
