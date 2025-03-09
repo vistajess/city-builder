@@ -8,12 +8,7 @@ import { Toaster } from "../components/ui/sonner";
 import { useHouseData } from "../contexts/house-data.context";
 import styles from "./page.module.css";
 import { ModalRef } from "../types/modal";
-
-const ManageFloorModal = lazy(() => 
-  import("../components/modals/manage-floor-modal").then(mod => ({ 
-    default: mod.ManageFloorModal 
-  }))
-);
+import { ManageFloorModal } from "../components/modals/manage-floor-modal";
 
 export default function Home() {
   const { savedLocation, selectedFloor } = useHouseData();
@@ -39,11 +34,7 @@ export default function Home() {
   return (
     <>
       <main className={`${styles.main} bg-blue-950`}>
-        {selectedFloor?.floorId && (
-          <Suspense fallback={null}>
-            <ManageFloorModal ref={manageFloorModalRef} />
-          </Suspense>
-        )}
+        {selectedFloor?.floorId && <ManageFloorModal ref={manageFloorModalRef} />}
         <Toaster />
         <Overview />
 
