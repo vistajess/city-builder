@@ -2,12 +2,17 @@
 import { useHouseData } from "@/src/contexts/house-data.context";
 import { useFilteredHouses } from "@/src/hooks/useFilteredHouses";
 import { ModalRef } from "@/src/types/modal";
-import { useCallback, useMemo, useRef, useState } from "react";
-import LocationPickerModal from "../modals/location-picker-modal";
-import { ManageHouseModal } from "../modals/manage-house-modal";
+import { lazy, Suspense, useCallback, useMemo, useRef, useState } from "react";
 import { HouseDetails } from "./house-details";
 import { LocationWeatherDetails } from "./location-weather-details";
 import { ShowHide } from "./show-hide";
+
+// Lazy load the location picker modal
+const LocationPickerModal = lazy(() => import("../modals/location-picker-modal"));
+// Lazy load the house management modal
+const ManageHouseModal = lazy(() => import("../modals/manage-house-modal").then(mod => ({
+  default: mod.ManageHouseModal
+})));
 
 const Overview = () => {
   const { savedLocation } = useHouseData();
@@ -38,10 +43,14 @@ const Overview = () => {
 
   return (
     <>
-      <LocationPickerModal ref={locationPickerModalRef} />
-      <ManageHouseModal ref={manageHouseModalRef} />
+      <Suspense fallback={null}>
+        <LocationPickerModal ref={locationPickerModalRef} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <ManageHouseModal ref={manageHouseModalRef} />
+      </Suspense>
       {savedLocation && (
-        <div className={`absolute top-5 right-5 z-10`}>
+        <div className={`fixed top-5 right-5 z-30`}>
           <div className="absolute top-0 right-0 w-10 h-10 flex items-center justify-center z-10">
             <ShowHide
               isOverviewVisible={isOverviewVisible}
