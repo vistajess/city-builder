@@ -11,7 +11,7 @@
 
 .ground {
   background: linear-gradient(to bottom, #3a7d44, #5aa469);
-  position: absolute;
+  position: relative;
   bottom: 0;
   width: 100%;
   height: 150px;
