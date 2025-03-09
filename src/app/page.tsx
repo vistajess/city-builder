@@ -1,14 +1,14 @@
 "use client";
-import { lazy, Suspense, useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Cloud } from "../components/cloud/cloud";
 import { HouseList } from "../components/house/house-list";
+import { ManageFloorModal } from "../components/modals/manage-floor-modal";
 import Overview from "../components/overview/overview";
 import { SkyBackground } from "../components/sky-background/sky-background";
 import { Toaster } from "../components/ui/sonner";
 import { useHouseData } from "../contexts/house-data.context";
-import styles from "./page.module.css";
 import { ModalRef } from "../types/modal";
-import { ManageFloorModal } from "../components/modals/manage-floor-modal";
+import styles from "./page.module.css";
 
 export default function Home() {
   const { savedLocation, selectedFloor } = useHouseData();
