@@ -1,5 +1,5 @@
 import { Floor as FloorType } from "@/src/types/floor";
-import { FC, memo } from "react";
+import { FC } from "react";
 import React from "react";
 import styles from "./house.module.css";
 import { useHouseData } from "@/src/contexts/house-data.context";
@@ -21,6 +21,8 @@ export const Floor = React.memo(({ floor }: { floor: FloorType }) => {
     </div>
   );
 }) as FloorComponent;
+
+Floor.displayName = "Floor";
 
 Floor.Normal = React.memo(({
   floor,

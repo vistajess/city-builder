@@ -1,7 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDebounce } from "use-debounce";
+import { LOCAL_STORAGE_KEYS } from "../constants/local-storage";
 import { generateUUID } from "../lib/id-generator";
+import { Floor } from "../types/floor";
 import { House } from "../types/house";
 import { Location } from "../types/location";
 import {
@@ -14,9 +17,6 @@ import {
   HouseDataContext,
   useHouseData,
 } from "./house-data.context";
-import { LOCAL_STORAGE_KEYS } from "../constants/local-storage";
-import { useDebounce } from "use-debounce";
-import { Floor } from "../types/floor";
 export const useHouseContext = () => {
   return {
     ...useHouseData(),
@@ -32,7 +32,6 @@ export const HouseContextProvider = ({
   children,
 }: HousesContextProviderProps) => {
   const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
-  // const [selectedFloor, setSelectedFloor] = useState<Floor | null>(null);
   const [savedLocation, setSavedLocation] = useState<Location | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<Floor | null>(null);
   const [houses, setHouses] = useState<Map<string, House>>(() => {
@@ -108,7 +107,7 @@ export const HouseContextProvider = ({
         ]);
       });
     },
-    [houses]
+    []
   );
 
   const cloneHouse = useCallback(
@@ -154,7 +153,7 @@ export const HouseContextProvider = ({
         return newHouses;
       });
     },
-    [houses]
+    []
   );
 
   const generateFloors = (house: House) => {
