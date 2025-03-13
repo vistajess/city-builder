@@ -29,7 +29,8 @@ A dynamic and interactive city builder application that allows users to create, 
 
 - **Next.js** - React framework for production
 - **Tailwind CSS** - Utility-first CSS framework
-- **React Query** - Data fetching and state management
+- **React Query** - Data fetching for weather API
+- **React Context API** - State management,powerful tool that allows you to manage and share state across your component tree without prop drilling. I
 
 ## ⚙️ Development Timeline
 
