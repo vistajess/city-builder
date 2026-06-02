@@ -7,20 +7,32 @@ type CloudProps = {
   opacity: number;
 };
 
-export const Cloud = ({
-  size,
-  top,
-  opacity,
-}: CloudProps) => {
-  const [randomLeftPosition, setRandomLeftPosition] = useState(0);
+export const Cloud = ({ size, top, opacity }: CloudProps) => {
+  // Deterministic initial left position (consistent on SSR and first client paint)
+  // Seeded from size so each cloud starts at a distinct spread position.
+  const [randomLeftPosition] = useState(() => (size % 100) + 1);
   const [randomFloatClass, setRandomFloatClass] = useState("animate-slide");
-  
+
   useEffect(() => {
-    const floatClasses = ['animate-slide', 'animate-slide-right', 'animate-slide-across', 'animate-slide-bounce'];
+    // Only the animation class randomises post-mount (pure CSS, no layout shift)
+    const floatClasses = [
+      "animate-slide",
+      "animate-slide-right",
+      "animate-slide-across",
+      "animate-slide-bounce",
+    ];
     const randomFloatIndex = Math.floor(Math.random() * floatClasses.length);
     setRandomFloatClass(floatClasses[randomFloatIndex]);
-    setRandomLeftPosition(Math.floor(Math.random() * 100) + 1);
   }, []);
+
+  // Parallax depth cues: smaller/further clouds get a slight blur and softer shadow
+  const depthBlur = size < 140 ? 2 : size < 170 ? 1 : 0;
+  const filterValue = [
+    "drop-shadow(0 6px 6px rgba(40, 50, 70, 0.18))",
+    depthBlur > 0 ? `blur(${depthBlur}px)` : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div
@@ -29,10 +41,11 @@ export const Cloud = ({
         width: `${size}px`,
         opacity: opacity,
         top: top,
-        left: `${randomLeftPosition}vw`
+        left: `${randomLeftPosition}vw`,
+        filter: filterValue,
       }}
     >
-      <svg viewBox="0 0 64 32" width={size} height={size * 0.5} fill="white">
+      <svg viewBox="0 0 64 32" width={size} height={size * 0.5} fill="#fdfdff">
         <circle cx="16" cy="16" r="16" />
         <circle cx="32" cy="12" r="12" />
         <circle cx="48" cy="16" r="16" />

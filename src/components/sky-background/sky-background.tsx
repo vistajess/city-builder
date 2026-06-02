@@ -10,7 +10,7 @@ export const SkyBackground = ({ weatherCode }: { weatherCode: string }) => {
   }, [weatherCode]);
 
   return (
-    <div className={`fixed h-screen w-screen ${bgClass} flex justify-center items-center z-0`}>
+    <div className={`sky-root fixed inset-0 h-screen w-screen ${bgClass} flex justify-center items-center z-0`}>
       {bgClass === "bg-sunny" && (
         <>
           <div className="sun"></div>

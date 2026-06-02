@@ -1,79 +1,168 @@
+/* === Sky backgrounds — 8 weather states, richer multi-stop gradients === */
+
 .bg-clear-day {
-  background: linear-gradient(to bottom, #60a5fa, #bfdbfe); /* from-blue-400 to-blue-200 */
-  transition: all 1s ease-in-out;
+  background: linear-gradient(to bottom, #3b82f6 0%, #60a5fa 40%, #93c5fd 72%, #dbeafe 100%);
+  transition: background 1s ease-in-out;
 }
 
 .bg-clear-night {
-  background: linear-gradient(to bottom, #111827, #000000); /* from-gray-900 to-black */
-  transition: all 1s ease-in-out;
+  background: linear-gradient(to bottom, #0b1220 0%, #111827 45%, #1a2744 75%, #263554 100%);
+  transition: background 1s ease-in-out;
 }
 
 .bg-cloudy {
-  background: linear-gradient(to bottom, #9ca3af, #d1d5db); /* from-gray-400 to-gray-200 */
-  transition: all 1s ease-in-out;
+  background: linear-gradient(to bottom, #6b7280 0%, #9ca3af 40%, #c4c9d0 72%, #e5e7eb 100%);
+  transition: background 1s ease-in-out;
 }
 
 .bg-rainy {
-  background: linear-gradient(to bottom, #2563eb, #6b7280); /* from-blue-600 to-gray-500 */
-  transition: all 1s ease-in-out;
+  background: linear-gradient(to bottom, #1d4ed8 0%, #2563eb 35%, #4b6b8c 65%, #7a8fa0 100%);
+  transition: background 1s ease-in-out;
 }
 
 .bg-snowy {
-  background: linear-gradient(to bottom, #d1d5db, #ffffff); /* from-gray-300 to-white */
-  transition: all 1s ease-in-out;
+  background: linear-gradient(to bottom, #a8b8cc 0%, #c8d5e0 40%, #dde6ed 70%, #f0f4f8 100%);
+  transition: background 1s ease-in-out;
 }
 
 .bg-stormy {
-  background: linear-gradient(to bottom, #374151, #1f2937); /* from-gray-700 to-gray-900 */
-  transition: all 1s ease-in-out;
+  background: linear-gradient(to bottom, #1f2937 0%, #374151 40%, #4b5563 70%, #6b7280 100%);
+  transition: background 1s ease-in-out;
 }
 
 .bg-foggy {
-  background: linear-gradient(to bottom, #6b7280, #d1d5db); /* from-gray-500 to-gray-300 */
-  transition: all 1s ease-in-out;
+  background: linear-gradient(to bottom, #4b5563 0%, #6b7280 35%, #9ca3af 65%, #d4d8dd 100%);
+  transition: background 1s ease-in-out;
 }
 
-
 .bg-sunny {
-  background: linear-gradient(to bottom, #ffdb70, #fff4c2); /* Softer, pastel-like sunny yellow */
-  transition: all 1s ease-in-out;
-  position: relative;
+  background: linear-gradient(to bottom, #f59e0b 0%, #fbbf24 30%, #fcd34d 60%, #fef9c3 100%);
+  transition: background 1s ease-in-out;
+}
+
+/* === Horizon depth haze — sky-root class applied to the root sky div === */
+.sky-root {
   overflow: hidden;
 }
 
-/* Sun */
+.sky-root::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30%;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 100%);
+  z-index: 1;
+}
+
+/* === Sun — concentric with sun-rays (both anchored at top:18% left:50%) === */
 .sun {
   position: absolute;
-  top: 15%;
+  top: 18%;
   left: 50%;
   width: 140px;
   height: 140px;
-  background: radial-gradient(circle, #ffd700, #ffbb33);
+  background: radial-gradient(circle at 50% 50%, #fff3b0 0%, #ffd700 45%, #ffbb33 100%);
   border-radius: 50%;
-  box-shadow: 0 0 50px rgba(255, 200, 50, 0.8);
-  transform: translateX(-50%);
+  box-shadow:
+    0 0 60px rgba(255, 200, 50, 0.85),
+    0 0 120px rgba(255, 200, 50, 0.35);
+  transform: translate(-50%, -50%);
   animation: sun-glow 4s infinite alternate ease-in-out;
+  z-index: 2;
 }
 
-/* Sun Rays */
 .sun-rays {
   position: absolute;
-  top: 15%;
+  top: 18%;
   left: 50%;
-  width: 220px;
-  height: 220px;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 10%, rgba(255, 215, 0, 0) 70%);
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 215, 0, 0.30) 18%,
+    rgba(255, 215, 0, 0.10) 45%,
+    rgba(255, 215, 0, 0) 70%
+  );
   border-radius: 50%;
   transform: translate(-50%, -50%) rotate(0deg);
-  animation: sun-rays-rotate 8s infinite linear;
+  animation: sun-rays-rotate 14s infinite linear;
+  z-index: 2;
+}
+
+/* === CSS-only precipitation overlays === */
+
+/* Rain (rainy + stormy) — scrolling diagonal streak gradient */
+.bg-rainy::before,
+.bg-stormy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background-image: repeating-linear-gradient(
+    transparent 0px 6px,
+    rgba(200, 220, 255, 0.22) 6px 8px
+  );
+  background-size: 2px 40px;
+  transform: rotate(8deg) scale(1.4);
+  animation: rain-fall 0.6s linear infinite;
+}
+
+/* Snow — layered radial-gradient dots drifting down */
+.bg-snowy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background-image:
+    radial-gradient(2px 2px at 15%  8%,  rgba(255, 255, 255, 0.90) 50%, transparent 51%),
+    radial-gradient(2px 2px at 55% 22%,  rgba(255, 255, 255, 0.80) 50%, transparent 51%),
+    radial-gradient(3px 3px at 78% 45%,  rgba(255, 255, 255, 0.90) 50%, transparent 51%),
+    radial-gradient(2px 2px at 35% 60%,  rgba(255, 255, 255, 0.70) 50%, transparent 51%),
+    radial-gradient(2px 2px at 88% 15%,  rgba(255, 255, 255, 0.80) 50%, transparent 51%),
+    radial-gradient(3px 3px at 22% 72%,  rgba(255, 255, 255, 0.90) 50%, transparent 51%);
+  background-size:
+    200px 200px,
+    300px 300px,
+    250px 250px,
+    280px 280px,
+    180px 180px,
+    320px 320px;
+  animation: snow-fall 10s linear infinite;
+}
+
+/* === Keyframes === */
+
+@keyframes rain-fall {
+  to { background-position: 0 40px; }
+}
+
+@keyframes snow-fall {
+  to {
+    background-position:
+      0 200px,
+      0 300px,
+      0 250px,
+      0 280px,
+      0 180px,
+      0 320px;
+  }
 }
 
 @keyframes sun-glow {
   from {
-    box-shadow: 0 0 50px rgba(255, 200, 50, 0.6);
+    box-shadow:
+      0 0 50px rgba(255, 200, 50, 0.6),
+      0 0 100px rgba(255, 200, 50, 0.25);
   }
   to {
-    box-shadow: 0 0 90px rgba(255, 200, 50, 1);
+    box-shadow:
+      0 0 90px rgba(255, 200, 50, 1),
+      0 0 160px rgba(255, 200, 50, 0.50);
   }
 }
 
@@ -85,4 +174,3 @@
     transform: translate(-50%, -50%) rotate(360deg);
   }
 }
-

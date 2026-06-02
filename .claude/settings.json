@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-Process -Id 17960)",
+      "Bash(npm run *)"
+    ]
+  }
+}

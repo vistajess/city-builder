@@ -173,3 +173,14 @@
     --chart-5: 340 75% 55%;
   }
 }
+
+/* City-builder layout anchors — floor-row and floor-list-container are global
+   (non-CSS-module) class names used in floor-list.tsx for event delegation.
+   position:relative enables sibling z-index stacking when a floor is hovered/lifted. */
+.floor-row {
+  position: relative;
+}
+
+.floor-list-container {
+  position: relative;
+}

@@ -1,48 +1,41 @@
+/* Calm parallax drift animations — monotonic so no snap-back at loop point */
+
 .animate-slide {
-  animation: slide-left-right 10s ease-in-out infinite;
+  animation: drift-slow 60s linear infinite;
 }
 
 .animate-slide-right {
-  animation: slide-right-left 10s ease-in-out infinite;
+  animation: drift-slow-rev 70s linear infinite;
 }
 
 .animate-slide-across {
-  animation: slide-across-screen 8s linear infinite;
+  animation: drift-across 55s linear infinite;
 }
 
 .animate-slide-bounce {
-  animation: slide-bounce 10s ease-in-out infinite;
+  animation: drift-bob 48s ease-in-out infinite;
 }
 
-@keyframes slide-left-right {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(20px); }
-  50% { transform: translateX(80px); }
-  70% { transform: translateX(150px); }
-  100% { transform: translateX(200px); }
+/* Slow rightward drift — big near-clouds */
+@keyframes drift-slow {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(180px); }
 }
 
-@keyframes slide-right-left {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-20px); }
-  50% { transform: translateX(-80px); }
-  70% { transform: translateX(-150px); }
-  100% { transform: translateX(-200px); }
+/* Slow leftward drift — varies direction for depth variety */
+@keyframes drift-slow-rev {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-180px); }
 }
 
-@keyframes slide-across-screen {
-  0% { transform: translateX(-100%); }
-  20% { transform: translateX(-80%); }
-  40% { transform: translateX(-60%); }
-  60% { transform: translateX(-40%); }
-  80% { transform: translateX(-20%); }
-  100% { transform: translateX(0%); }
+/* Wide across-screen sweep — mid-layer clouds */
+@keyframes drift-across {
+  0%   { transform: translateX(-10vw); }
+  100% { transform: translateX(60vw); }
 }
 
-@keyframes slide-bounce {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(20px); }
-  40% { transform: translateX(40px); }
-  60% { transform: translateX(60px); }
-  75% { transform: translateX(75px); }
+/* Gentle bob (X + subtle Y) — far small clouds */
+@keyframes drift-bob {
+  0%,  100% { transform: translate(0, 0); }
+  50%        { transform: translate(40px, -10px); }
 }
